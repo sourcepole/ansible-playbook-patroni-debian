@@ -33,6 +33,14 @@
   tags:
     - config
 
+- name: Listen for other cluster peers
+  lineinfile:
+    dest: "/etc/default/etcd"
+    line: "ETCD_LISTEN_PEER_URLS=\"http://{{ hostvars[ansible_hostname]['ansible_eth0']['ipv4']['address'] }}:2380\""
+    regexp: ".*ETCD_LISTEN_PEER_URLS.*"
+  tags:
+    - config
+
 - name: Enable client listen interface
   lineinfile:
     dest: "/etc/default/etcd"
