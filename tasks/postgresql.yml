@@ -12,18 +12,6 @@
     filename: 'pgdg'
     update_cache: true
 
-- name: Install generally useful packages
-  package:
-    name:
-      - tree
-      - vim
-      - less
-      - screen
-      - htop
-      - ssl-cert
-      - net-tools
-    state: present
-
 - name: Install postgresql-common
   package:
     name: postgresql-common
