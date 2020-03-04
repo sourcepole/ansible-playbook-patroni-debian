@@ -5,6 +5,7 @@
     - vars.yml
   tasks:
     - include: tasks/set_dcs_ips.yml
+      tags: always
 
 - name: setup DCS servers
   hosts: dcs_servers
