@@ -1,0 +1,41 @@
+- name: restart etcd
+  systemd:
+    daemon_reload: yes
+    name: etcd
+    state: restarted
+    enabled: yes
+
+- name: restart consul
+  systemd:
+    daemon_reload: yes
+    name: consul
+    state: restarted
+    enabled: yes
+
+- name: restart zookeeper
+  systemd:
+    daemon_reload: yes
+    name: zookeeper
+    state: restarted
+    enabled: yes
+
+- name: restart patroni
+  systemd:
+    daemon_reload: yes
+    name: patroni@{{ postgresql_major_version }}-{{ postgresql_cluster_name }}
+    state: restarted
+    enabled: yes
+
+- name: restart vip-manager
+  systemd:
+    daemon_reload: yes
+    name: vip-manager@{{ postgresql_major_version }}-{{ postgresql_cluster_name }}
+    state: restarted
+    enabled: yes
+  when: vip is defined and vip != ""
+
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+
+

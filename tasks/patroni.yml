@@ -39,6 +39,7 @@
     mode: 0640
     owner: "postgres"
     group: "postgres"
+  notify: restart patroni
   tags:
     - config
 
@@ -49,29 +50,14 @@
     mode: 0640
     owner: "postgres"
     group: "postgres"
+  notify: restart patroni
   tags:
     - config
 
 - name: Create patroni configuration
   command: pg_createconfig_patroni --force --hostip={{ ansible_default_ipv4.address }} {% if postgresql_port is defined %}--port={{ postgresql_port }}{% endif %} {% if vip is defined %}--vip={{ vip }}{% endif %} {{ postgresql_major_version }} {{ postgresql_cluster_name }}
-  tags:
-    - config
-
-- name: systemctl daemon-reload / start patroni
-  systemd:
-    daemon_reload: yes
-    name: patroni@{{ postgresql_major_version }}-{{ postgresql_cluster_name }}
-    state: restarted
-    enabled: yes
-  tags:
-    - config
-
-- name: systemctl daemon-reload / start vip-manager
-  systemd:
-    daemon_reload: yes
-    name: vip-manager@{{ postgresql_major_version }}-{{ postgresql_cluster_name }}
-    state: restarted
-    enabled: yes
-  when: vip is defined and vip != ""
+  notify:
+    - restart patroni
+    - restart vip-manager
   tags:
     - config

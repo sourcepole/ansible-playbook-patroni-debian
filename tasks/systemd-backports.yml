@@ -12,8 +12,5 @@
     name: systemd
     default_release: stretch-backports
     state: latest
+  notify: reload systemd
   when: (ansible_distribution_release == "stretch")
-
-- name: systemctl daemon-reload
-  systemd:
-    daemon_reload: yes

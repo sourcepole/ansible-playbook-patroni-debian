@@ -10,12 +10,6 @@
     dest: "/etc/default/zookeeper"
     line: "JAVA_OPTS=\"-Djava.net.preferIPv4Stack=true\""
     regexp: ".*JAVA_OPTS.*"
+  notify: restart zookeper
   tags:
     - config
-
-- name: systemctl daemon-reload / start zookeeper
-  systemd:
-    daemon_reload: yes
-    name: zookeeper
-    state: restarted
-    enabled: yes
