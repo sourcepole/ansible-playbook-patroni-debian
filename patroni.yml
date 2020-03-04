@@ -1,4 +1,11 @@
 ---
+- name: setup facts
+  hosts: all
+  vars_files:
+    - vars.yml
+  tasks:
+    - include: tasks/set_dcs_ips.yml
+
 - name: setup DCS servers
   hosts: dcs_servers
   vars_files:
@@ -8,7 +15,6 @@
   become_method: sudo
 
   tasks:
-    - include: tasks/set_dcs_ips.yml
     - include: tasks/{{ dcs }}.yml
 
 
