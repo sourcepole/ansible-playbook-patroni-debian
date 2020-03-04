@@ -66,6 +66,15 @@
   tags:
     - config
 
+# ugly! Is there a better way?
+- name: Setup URLs of initials members
+  lineinfile:
+    dest: "/etc/default/etcd"
+    line: "ETCD_INITIAL_CLUSTER=\"{% for host in groups['dcs_servers'] %}{{ host }}=http://{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}\""
+    regexp: ".*ETCD_INITIAL_CLUSTER.*"
+  tags:
+    - config
+
 - name: systemctl daemon-reload / start etcd
   systemd:
     daemon_reload: yes
