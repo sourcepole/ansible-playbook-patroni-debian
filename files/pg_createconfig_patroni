@@ -95,9 +95,6 @@ else
     fi
 fi
 
-echo $PORT
-exit 1
-
 # determine API port (default is 8008) by incrementing for each additional
 # Postgres port.  2576 is 8008 - 5432.
 API_PORT=$((2576+$PORT))
