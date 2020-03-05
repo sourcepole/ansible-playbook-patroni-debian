@@ -1,6 +1,12 @@
 ---
 
 - block:
+
+  - name: install patched pg_createconfig_patroni
+    copy:
+      src: pg_createconfig_patroni
+      dest: /usr/bin/pg_createconfig_patroni
+
   # the "Create patroni configuration" task below always changes the file, so we check ourselves
   # if it changed...
   #
@@ -33,15 +39,6 @@
       dest: "{{ patroni_temp_file.path }}"
     # never fail, first time there's no src
     failed_when: false
-  
-  # pg_createconfig_patroni before 1.6.4-1 will not clear the vip config
-  # file before appending to it: https://bugs.debian.org/953147
-  #
-  - name: clear vip config file
-    copy:
-      content: ""
-      dest: "{{ vip_config_file }}"
-    when: vip is defined and vip != ""
   
   - name: Create patroni configuration
     command: pg_createconfig_patroni --force --hostip={{ ansible_default_ipv4.address }} {% if postgresql_port is defined %}--port={{ postgresql_port }}{% endif %} {% if vip is defined %}--vip={{ vip }}{% endif %} {{ postgresql_major_version }} {{ postgresql_cluster_name }}
