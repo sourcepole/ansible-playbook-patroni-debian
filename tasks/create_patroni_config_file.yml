@@ -22,6 +22,8 @@
       remote_src: yes
       src: "{{ vip_config_file }}"
       dest: "{{ vip_temp_file.path }}"
+    # never fail, first time there's no src
+    failed_when: false
     when: vip is defined and vip != ""
   
   - name: make copy of patroni config file (does not change the host)
@@ -29,6 +31,8 @@
       remote_src: yes
       src: "{{ patroni_config_file }}"
       dest: "{{ patroni_temp_file.path }}"
+    # never fail, first time there's no src
+    failed_when: false
   
   - name: Create patroni configuration
     command: pg_createconfig_patroni --force --hostip={{ ansible_default_ipv4.address }} {% if postgresql_port is defined %}--port={{ postgresql_port }}{% endif %} {% if vip is defined %}--vip={{ vip }}{% endif %} {{ postgresql_major_version }} {{ postgresql_cluster_name }}
@@ -36,16 +40,16 @@
   - name: copy vip config to temp file (does not change the host)
     copy:
       remote_src: yes
-      src: "{{ vip_temp_file.path }}"
-      dest: "{{ vip_config_file }}"
+      src: "{{ vip_config_file }}"
+      dest: "{{ vip_temp_file.path }}"
     notify: restart vip-manager
     when: vip is defined and vip != ""
   
   - name: copy patroni config to temp file (does not change the host)
     copy:
       remote_src: yes
-      src: "{{ patroni_temp_file.path }}"
-      dest: "{{ patroni_config_file }}"
+      src: "{{ patroni_config_file }}"
+      dest: "{{ patroni_temp_file.path }}"
     notify: restart patroni
     when: vip is defined and vip != ""
 
