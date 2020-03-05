@@ -1,16 +1,20 @@
 ---
-- name: setup facts
+- name: Setup facts
   hosts: all
   vars_files:
     - vars.yml
+  handlers:
+    - include: handlers.yml
   tasks:
     - include: tasks/set_dcs_ips.yml
       tags: always
 
-- name: setup DCS servers
+- name: Setup DCS servers
   hosts: dcs_servers
   vars_files:
     - vars.yml
+  handlers:
+    - include: handlers.yml
   become: true
   become_user: root
   become_method: sudo
@@ -19,8 +23,10 @@
     - include: tasks/{{ dcs }}.yml
 
 
-- name: setup Postgres Servers
+- name: Setup Postgres Servers
   hosts: pgsql_servers
+  handlers:
+    - include: handlers.yml
   become: true
   become_user: root
   become_method: sudo
