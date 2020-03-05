@@ -64,16 +64,9 @@ The following useful variables can be set:
  * `patroni_replication_pass`
  * `patroni_postgres_pass`
  * `vip`
- * `vip_dcs_endpoint` (default: undefined, see below)
 
 If `dcs_server_ips` is set, then it will be used. If not set, then the IPs of
 hosts of the `dcs_servers` inventory group will be used.
-
-If you set up a DCS cluster with *more than one node* than and you are managing the
-virtual IP with `vip-manager` then you *will* have to specify `vip_dcs_endpoint`
-which is the URL to which `vip-manager` will try to connect for a DCS. This is a
-limitation of `vip-manager` which currently doesn't allow to specify more than one
-URL. Example: `--vip_dcs_endpoint=http://127.0.0.1:2379`.
 
 Example: `ansible-playbook -i inventory -e dcs=consul patroni.yml`
 

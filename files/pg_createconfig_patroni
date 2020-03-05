@@ -31,6 +31,7 @@ case $i in
     shift # past argument=value
     ;;
     --endpoint=*)
+    # one or more endpoints joined by commas are allowed
     DCS_ENDPOINT="${i#*=}"
     shift # past argument=value
     ;;
@@ -149,18 +150,20 @@ if [ -n "$VIP_IP" ]; then
 	exit 1
     fi
     if [ -z "$DCS_ENDPOINT" ]; then
-        DCS_ENDPOINT="$(egrep -v '^[[:space:]]*$|^ *#' /etc/patroni/dcs.yml | egrep '(host|-)' | egrep '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sed -r -e s/.*host:// -e s/-// -e 's/ //g' -e 's/^([0-9])/http:\/\/\1/')"
+        DCS_ENDPOINT="$(egrep -v '^[[:space:]]*$|^ *#' /etc/patroni/dcs.yml | egrep '(host|-)' | egrep -v '^[[:space:]]*$' | egrep '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | sed -r -e s/.*host:// -e s/-// -e 's/ //g' -e 's/^([0-9])/http:\/\/\1/')"
         if [ -z "$DCS_ENDPOINT" ]; then
             echo "DCS endpoint URL could not be determined from /etc/patroni/dcs.yml and --endpoint not provided, cannot write VIP file"
 	    exit 1
         fi
         if [ $(echo "$DCS_ENDPOINT" | wc -l) != 1 ]; then
-            echo "DCS endpoint URL could not be determined from /etc/patroni/dcs.yml and --endpoint not provided, cannot write VIP file"
-            exit 1
+	    # join multiple lines with commas
+	    # sed -> remove trailing comma
+	    DCS_ENDPOINT=$( echo "$DCS_ENDPOINT" | tr '\n' ',' | sed 's/,$//' )
         fi
     fi
-    if ! $(echo "$DCS_ENDPOINT" | egrep -q '^http.*://[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:[[:digit:]]+$'); then
-        echo "DCS endpoint URL not in 'http://1.2.3.4:1234' format, cannot write VIP file"
+    if ! $(echo "$DCS_ENDPOINT" | egrep -q '^(http.*://[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:[[:digit:]]+){1}(,http.*://[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:[[:digit:]]+)*$'); then
+        echo "DCS_ENDPOINT: $DCS_ENDPOINT"
+        echo "DCS endpoint URL not in 'http://1.2.3.4:1234[,http://2.3.4.5:1234]*' format, cannot write VIP file"
         exit 1
     fi
     LISTEN_VIP=",$VIP_IP"
