@@ -79,3 +79,9 @@
   notify: restart etcd
   tags:
     - config
+
+- name: make sure etcd is running
+  systemd:
+    name: etcd
+    state: started
+    enabled: yes

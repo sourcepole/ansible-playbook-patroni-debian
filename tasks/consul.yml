@@ -32,3 +32,9 @@
     src: files/consul.service
     dest: /etc/systemd/system/consul.service
   notify: restart consul
+
+- name: make sure consul is running
+  systemd:
+    name: consul
+    state: started
+    enabled: yes

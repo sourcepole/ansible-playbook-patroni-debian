@@ -53,5 +53,18 @@
   
   - include: tasks/create_patroni_config_file.yml
 
+- name: make sure patroni is running
+  systemd:
+    name: patroni@{{ postgresql_major_version }}-{{ postgresql_cluster_name }}
+    state: started
+    enabled: yes
+
+- name: make sure vip-manager is running
+  systemd:
+    name: vip-manager@{{ postgresql_major_version }}-{{ postgresql_cluster_name }}
+    state: started
+    enabled: yes
+  when: vip is defined and vip != ""
+
   # block tag:
   tags: config

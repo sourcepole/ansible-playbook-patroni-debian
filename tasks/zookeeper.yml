@@ -13,3 +13,10 @@
   notify: restart zookeper
   tags:
     - config
+
+- name: make sure zookeper is running
+  systemd:
+    name: zookeeper
+    state: started
+    enabled: yes
+
