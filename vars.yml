@@ -19,3 +19,4 @@ patroni_replication_pass: "replicator"
 patroni_postgres_pass: ""
 # vip-manager will manage the vip on each node if set
 #vip: "10.0.1.1"
+#vip_dcs_endpoint: "http://127.0.0.1:2379"
