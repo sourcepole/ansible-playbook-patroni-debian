@@ -66,7 +66,7 @@ else
 fi
 
 # find port of the cluster if it is already running
-EXISTING_PORT=$(pg_lsclusters | tail -n +2 | grep -E "^$VERSION[[:space:]]+$CLUSTER[[:space:]]+" | awk '{print $3}' )
+EXISTING_PORT=$(pg_lsclusters -h | grep -E "^$VERSION[[:space:]]+$CLUSTER[[:space:]]+" | awk '{print $3}' )
 
 if [ -z "$PORT" ]; then
     # no port was specified
@@ -77,7 +77,7 @@ if [ -z "$PORT" ]; then
 
     else
         # if our cluster isn't running yet, then try to guess next free port
-        PORT=$(($(pg_lsclusters | tail -n +2 | awk '{print $3}' | sort -n | tail -1) + 1))
+        PORT=$(($(pg_lsclusters -h | awk '{print $3}' | sort -n | tail -1) + 1))
         if [ "$PORT" -eq 1 ]; then
             # No cluster exists yet, use default port
             PORT=5432
