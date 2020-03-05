@@ -1,3 +1,4 @@
+---
 - name: restart etcd
   systemd:
     daemon_reload: yes
@@ -32,10 +33,7 @@
     name: vip-manager@{{ postgresql_major_version }}-{{ postgresql_cluster_name }}
     state: restarted
     enabled: yes
-  when: vip is defined and vip != ""
 
 - name: reload systemd
   systemd:
     daemon_reload: yes
-
-

@@ -32,32 +32,26 @@
     state: present
   when: vip is defined and vip != ""
 
-- name: Deploy patroni DCS config
-  template:
-    src: templates/dcs.yml
-    dest: /etc/patroni/dcs.yml
-    mode: 0640
-    owner: "postgres"
-    group: "postgres"
-  notify: restart patroni
-  tags:
-    - config
+- block:
+  - name: Deploy patroni DCS config
+    template:
+      src: templates/dcs.yml
+      dest: /etc/patroni/dcs.yml
+      mode: 0640
+      owner: "postgres"
+      group: "postgres"
+    notify: restart patroni
+  
+  - name: Deploy patroni config templates
+    template:
+      src: templates/config.yml.in
+      dest: /etc/patroni/config.yml.in
+      mode: 0640
+      owner: "postgres"
+      group: "postgres"
+    notify: restart patroni
+  
+  - include: tasks/create_patroni_config_file.yml
 
-- name: Deploy patroni config templates
-  template:
-    src: templates/config.yml.in
-    dest: /etc/patroni/config.yml.in
-    mode: 0640
-    owner: "postgres"
-    group: "postgres"
-  notify: restart patroni
-  tags:
-    - config
-
-- name: Create patroni configuration
-  command: pg_createconfig_patroni --force --hostip={{ ansible_default_ipv4.address }} {% if postgresql_port is defined %}--port={{ postgresql_port }}{% endif %} {% if vip is defined %}--vip={{ vip }}{% endif %} {{ postgresql_major_version }} {{ postgresql_cluster_name }}
-  notify:
-    - restart patroni
-    - restart vip-manager
-  tags:
-    - config
+  # block tag:
+  tags: config

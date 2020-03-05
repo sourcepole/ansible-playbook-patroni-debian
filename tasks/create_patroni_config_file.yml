@@ -1,0 +1,64 @@
+---
+
+- block:
+  # the "Create patroni configuration" task below always changes the file, so we check ourselves
+  # if it changed...
+  #
+  - set_fact:
+      patroni_config_file: "/etc/patroni/{{ postgresql_major_version }}-{{ postgresql_cluster_name }}.yml"
+      vip_config_file:     "/etc/patroni/{{ postgresql_major_version }}-{{ postgresql_cluster_name }}.vip"
+  
+  - name: create vip temp file (does not change the host)
+    tempfile:
+    register: vip_temp_file
+    when: vip is defined and vip != ""
+    
+  - name: create patroni temp file (does not change the host)
+    tempfile:
+    register: patroni_temp_file
+    
+  - name: make copy of vip config file (does not change the host)
+    copy:
+      remote_src: yes
+      src: "{{ vip_config_file }}"
+      dest: "{{ vip_temp_file.path }}"
+    when: vip is defined and vip != ""
+  
+  - name: make copy of patroni config file (does not change the host)
+    copy:
+      remote_src: yes
+      src: "{{ patroni_config_file }}"
+      dest: "{{ patroni_temp_file.path }}"
+  
+  - name: Create patroni configuration
+    command: pg_createconfig_patroni --force --hostip={{ ansible_default_ipv4.address }} {% if postgresql_port is defined %}--port={{ postgresql_port }}{% endif %} {% if vip is defined %}--vip={{ vip }}{% endif %} {{ postgresql_major_version }} {{ postgresql_cluster_name }}
+  
+  - name: copy vip config to temp file (does not change the host)
+    copy:
+      remote_src: yes
+      src: "{{ vip_temp_file.path }}"
+      dest: "{{ vip_config_file }}"
+    notify: restart vip-manager
+    when: vip is defined and vip != ""
+  
+  - name: copy patroni config to temp file (does not change the host)
+    copy:
+      remote_src: yes
+      src: "{{ patroni_temp_file.path }}"
+      dest: "{{ patroni_config_file }}"
+    notify: restart patroni
+    when: vip is defined and vip != ""
+
+  - name: delete vip temp file (does not change the host)
+    file:
+      path: "{{ vip_temp_file.path }}"
+      state: absent
+    when: vip is defined and vip != ""
+
+  - name: delete patroni temp file (does not change the host)
+    file:
+      path: "{{ patroni_temp_file.path }}"
+      state: absent
+
+  # block tag:
+  tags: config
