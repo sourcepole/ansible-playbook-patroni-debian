@@ -3,7 +3,7 @@ Ansible Playbook for Patroni on Debian
 
 This Ansible playbook allows to deploy a Patroni cluster.
 
-See [this article](https://www.credativ.de/blog/howtos/integration-von-patroni-in-debian/)
+See [this article](https://www.credativ.com/blog/integrating-patroni-debian)
 for a howto.
 
 This playbook is using the `patroni` packages provided by Debian and/or
