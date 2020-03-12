@@ -12,6 +12,15 @@ consul_group: "consul"
 postgresql_cluster_name: "test"
 postgresql_major_version: "11"
 postgresql_data_dir_base: "/var/lib/postgresql"
+
+# network that can do queries
+# by default network of eth0 IP address is used
+#postgresql_network: "10.0.0.016"
+
+# network that can do replication
+# by default network of eth0 IP address is used
+#postgresql_replication_network: "10.0.0.0/16"
+
 patroni_replication_user: "replicator"
 patroni_replication_pass: "replicator"
 # patroni_postgres_pass needs to be set if pg_rewind is to be used to get

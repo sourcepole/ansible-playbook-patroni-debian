@@ -66,7 +66,7 @@ bootstrap:
       - local   replication     all                                     peer
       - host    replication     all             127.0.0.1/32            md5
       - host    replication     all             ::1/128                 md5
-      - host    replication     all             @NETWORK@               md5
+      - host    replication     all             @REPL_NETWORK@          md5
 
 postgresql:
   # Custom clone method

@@ -64,6 +64,10 @@ The following useful variables can be set:
  * `postgresql_cluster_name` (default: test)
  * `postgresql_major_version` (default: 11)
  * `postgresql_data_dir_base` (default: `/var/lib/postgresql`)
+ * `postgresql_network` (default: network of eth0 interface)
+   network that access postgres and do queries. md5 auth is required.
+ * `postgresql_repl_network` (default: network of eth0 interface)
+   network that can do replication. md5 auth is required.
  * `patroni_replication_user` (default: `replicator`)
  * `patroni_replication_pass`
  * `patroni_postgres_pass`
