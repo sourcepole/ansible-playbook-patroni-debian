@@ -78,6 +78,13 @@ hosts of the `dcs_servers` inventory group will be used.
 
 Example: `ansible-playbook -i inventory -e dcs=consul patroni.yml`
 
+For further configuration and understanding it might be useful to consult
+the [patroni configuration settings documentation](https://github.com/zalando/patroni/blob/master/docs/SETTINGS.rst).
+It might be necessary to modify the [patroni template accordingly](templates/config.yml.in).
+
+Also please see https://github.com/zalando/patroni/issues/878#issuecomment-441558744 to
+understand how patroni settings propagate.
+
 Running multiple instances of Patroni/PostgreSQL
 ------------------------------------------------
 
