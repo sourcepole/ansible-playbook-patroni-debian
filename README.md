@@ -3,8 +3,8 @@ Ansible Playbook for Patroni on Debian
 
 This Ansible playbook allows to deploy a Patroni cluster.
 
-It is an enhanced fork of credativ's playbook. Please consult the
-[commit log](https://github.com/sourcepole/ansible-playbook-patroni-debian/commits/master)
+It is an enhanced fork of [credativ's playbook](https://github.com/credativ/ansible-playbook-patroni-debian).
+Please consult the [commit log](https://github.com/sourcepole/ansible-playbook-patroni-debian/commits/master)
 to see the changes.
 
 There's a [howto article](https://www.credativ.com/blog/integrating-patroni-debian)
