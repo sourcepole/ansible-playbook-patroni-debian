@@ -5,7 +5,6 @@
 #
 # * [improve brittle pg_lsclusters parsing](https://bugs.debian.org/953157)
 # * [rerunning pg_createconfig_patroni --force will keep on increasing the port number or fail if reusing the same port](https://bugs.debian.org/953162)
-# * [doesn't clean up /etc/patroni/$VERSION-$CLUSTER.vip file before appending to it](https://bugs.debian.org/953147)
 # * allow to set network address of allowed replication hosts via --repl-network
 
 for i in "$@"
