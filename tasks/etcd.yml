@@ -1,15 +1,4 @@
 ---
 - include: etcd_install_deb.yml
 - include: etcd_configure.yml
-
-# linked to task "make sure etcd is not started on first install" above
-- name: unmask etcd
-  systemd:
-    name: etcd
-    masked: no
-
-- name: make sure etcd is running
-  systemd:
-    name: etcd
-    state: started
-    enabled: yes
+- include: etcd_unmask_and_start.yml
