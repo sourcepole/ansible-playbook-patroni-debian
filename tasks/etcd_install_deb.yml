@@ -31,13 +31,13 @@
     masked: yes
   when: package_is_installed.rc != 0
 
-- name: Install {{ etcd_package }} package
-  apt:
-    pkg: "{{ etcd_package }}"
-
 - name: Setup snapshot repository
   apt_repository:
     repo: 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20161015T102332Z/ testing main'
     filename: 'snapshot'
     update_cache: true
   when: (ansible_distribution_release == "stretch")
+
+- name: Install {{ etcd_package }} package
+  apt:
+    pkg: "{{ etcd_package }}"
