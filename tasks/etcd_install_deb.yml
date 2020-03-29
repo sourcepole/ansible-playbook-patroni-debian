@@ -1,0 +1,43 @@
+---
+- set_fact:
+    etcd_package: etcd
+  when: ansible_distribution_release == "xenial"
+
+- set_fact:
+    etcd_package: etcd=2.3.7+dfsg-5
+  when: ansible_distribution_release == "stretch"
+
+- set_fact:
+    etcd_package: etcd-server
+  when: ((ansible_distribution_release != "stretch") and (ansible_distribution_release != "xenial"))
+
+- name: check if package {{ etcd_package }} is installed
+  shell: dpkg-query -W -f='${Status}' {{ etcd_package }} | grep 'install ok installed'
+  failed_when:  no  # don't ever fail
+  changed_when: no  # doesn't ever change anything
+  check_mode:   no  # run in check mode
+  register: package_is_installed
+
+# coupled to task "unmask etcd" below
+#
+# This is task ensures that etcd doesn't start and does not
+# setup state for the the "default" cluster. We want to set
+# up the cluster first and then start it, so it initializes 
+# correctly with all peers.
+#
+- name: make sure etcd is not started on first install
+  systemd:
+    name: etcd
+    masked: yes
+  when: package_is_installed.rc != 0
+
+- name: Install {{ etcd_package }} package
+  apt:
+    pkg: "{{ etcd_package }}"
+
+- name: Setup snapshot repository
+  apt_repository:
+    repo: 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20161015T102332Z/ testing main'
+    filename: 'snapshot'
+    update_cache: true
+  when: (ansible_distribution_release == "stretch")
