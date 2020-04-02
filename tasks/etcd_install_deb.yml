@@ -11,7 +11,7 @@
     etcd_package: etcd-server
   when: ((ansible_distribution_release != "stretch") and (ansible_distribution_release != "xenial"))
 
-- name: check if package {{ etcd_package }} is installed
+- name: Check if package {{ etcd_package }} is installed
   shell: dpkg-query -W -f='${Status}' {{ etcd_package }} | grep 'install ok installed'
   failed_when:  no  # don't ever fail
   changed_when: no  # doesn't ever change anything
@@ -25,7 +25,7 @@
 # up the cluster first and then start it, so it initializes 
 # correctly with all peers.
 #
-- name: make sure etcd is not started on first install
+- name: Make sure etcd is not started on first install
   systemd:
     name: etcd
     masked: yes
