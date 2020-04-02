@@ -21,9 +21,7 @@ config file. That will cause the postgres init script/systemd unit not to
 start that cluster automatically. Instead `patroni` will take care to start
 and manage that cluster.
 
-For production use it should be
-hardened (e.g. using Ansible Vault and encrypted communication between the DCS
-server and the Patroni clients).
+For production use it should be hardened to use Ansible Vault for secrets.
 
 The default topology consists of one node (`master`) acting as the DCS
 (Distributed Consensus Store) server, and three PostgreSQL/Patroni nodes
@@ -76,6 +74,7 @@ The following useful variables can be set:
  * `patroni_replication_pass`
  * `patroni_postgres_pass`
  * `vip`
+ * `use_certificates` (only applies to `etcd` DCS, default: false, see below)
 
 If `dcs_server_ips` is set, then it will be used. If not set, then the IPs of
 hosts of the `dcs_servers` inventory group will be used.
@@ -114,6 +113,36 @@ When the `vip` variable is set to an IP address, an appropriate configuration
 file for `vip-manager` will be written and the cluster-specific `vip-manager`
 service will be started.
 
+Etcd with certificate based authentication
+------------------------------------------
+
+Configuring etcd to use certificate based, authenticated connections is
+supported. Please set:
+
+    use_certificates: true
+
+(see `patroni.yml` for details)
+
+You need to:
+
+* either use externally generated certificates or
+* or you can let this playbook generate a CA and certificates
+
+If you want to let this playbook generate the CA and certificates, then
+you need to:
+
+* uncomment the line:
+  
+      - import_playbook: certificates-sp.yml
+
+  in `patroni.yml`
+
+* configure `certificates-sp.yml`
+
+* install the required `tpo.local_certificate_authority` role like this:
+
+      ansible-galaxy install tpo.local_certificate_authority
+
 Rewinding/Recloning outdated former primaries
 ---------------------------------------------
 
@@ -128,3 +157,4 @@ prefer to have the primary stay down for manual inspection instead, you should
 comment out (or set to `false`) the parameters `use_pg_rewind`,
 `remove_data_directory_on_rewind_failure` and
 `remove_data_directory_on_diverged_timelines`.
+

@@ -9,10 +9,30 @@
     - include: tasks/set_dcs_ips.yml
       tags: always
 
+# If you want to configure etcd with certificate based
+# authentification, then you need to create and copy
+# the certificates to the DCS servers and to the patroni
+# servers.
+#
+# The certificates.yml playbook will set up a CA and
+# create etcd certificates. You need to edit, configure
+# and include that playbook here, if you want to have
+# the certificates set up by that playbook.
+#
+# Please use a different mechanism for creating a CA
+# and certificates if this one doesn't fit you.
+#
+#- import_playbook: certificates-sp.yml
+
 - name: Setup DCS servers
   hosts: dcs_servers
   vars_files:
     - vars.yml
+  vars:
+    # if you want to use certificate based authentication
+    # for etcd, then you need to set:
+    # use_certificates: true
+    # requires `ca_dir` to be set
   handlers:
     - include: handlers.yml
   become: true

@@ -1,0 +1,28 @@
+---
+- name: Create CA and server certificates
+  hosts: localhost
+  vars:
+    ca_dir: files/example_CA
+  roles:
+     - role: tpo.local_certificate_authority/ca
+       ca_name: "Example CA"
+       ca_subj: "/C=CH/ST=GR/L=Maladers/O=Example Org/CN=Example Org CA"
+       # Root CA certificate should be valid for 10 years
+       ca_days: 3650
+       tags: CA
+  tasks:
+    - name: Create host certificates
+      include_role:
+        name: tpo.local_certificate_authority/server_cert
+        apply:
+          tags: CA
+      vars:
+        server_name: "{{ server_name_loop }}"
+        server_subjectAlternativeName: "DNS:{{ server_name_loop }},IP:{{ hostvars[server_name_loop]['ansible_eth0']['ipv4']['address'] }}"
+        server_subj: "/C=CH/ST=GR/L=Maladers/O=Example Org/CN={{ server_name_loop }}"
+        # Server certificate should be valid for 10 years
+        server_days: 3650
+      loop: "{{ groups['dcs_servers'] + groups['pgsql_servers'] }}"
+      loop_control:
+        loop_var: server_name_loop
+      tags: CA
