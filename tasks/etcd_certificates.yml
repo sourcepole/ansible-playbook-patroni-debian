@@ -14,7 +14,7 @@
   
   # this creates the ssl-cert group required by the
   # subsequent task
-  - name: install ssl-cert package
+  - name: Install ssl-cert package
     apt: pkg=ssl-cert
 
   - name: Copy server private key

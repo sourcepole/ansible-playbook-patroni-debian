@@ -2,7 +2,7 @@
 
 - block:
 
-  - name: install patched pg_createconfig_patroni
+  - name: Install patched pg_createconfig_patroni
     copy:
       src: pg_createconfig_patroni
       dest: /usr/bin/pg_createconfig_patroni
@@ -14,16 +14,16 @@
       patroni_config_file: "/etc/patroni/{{ postgresql_major_version }}-{{ postgresql_cluster_name }}.yml"
       vip_config_file:     "/etc/patroni/{{ postgresql_major_version }}-{{ postgresql_cluster_name }}.vip"
   
-  - name: create vip temp file (does not change the host)
+  - name: Create vip temp file (does not change the host)
     tempfile:
     register: vip_temp_file
     when: vip is defined and vip != ""
     
-  - name: create patroni temp file (does not change the host)
+  - name: Create patroni temp file (does not change the host)
     tempfile:
     register: patroni_temp_file
     
-  - name: make copy of vip config file (does not change the host)
+  - name: Make copy of vip config file (does not change the host)
     copy:
       remote_src: yes
       src: "{{ vip_config_file }}"
@@ -32,7 +32,7 @@
     failed_when: false
     when: vip is defined and vip != ""
   
-  - name: make copy of patroni config file (does not change the host)
+  - name: Make copy of patroni config file (does not change the host)
     copy:
       remote_src: yes
       src: "{{ patroni_config_file }}"
@@ -52,7 +52,7 @@
         {{ postgresql_major_version }}
         {{ postgresql_cluster_name }}
   
-  - name: copy vip config to temp file (does not change the host)
+  - name: Copy vip config to temp file (does not change the host)
     copy:
       remote_src: yes
       src: "{{ vip_config_file }}"
@@ -60,7 +60,7 @@
     notify: restart vip-manager
     when: vip is defined and vip != ""
   
-  - name: copy patroni config to temp file (does not change the host)
+  - name: Copy patroni config to temp file (does not change the host)
     copy:
       remote_src: yes
       src: "{{ patroni_config_file }}"
@@ -68,13 +68,13 @@
     notify: restart patroni
     when: vip is defined and vip != ""
 
-  - name: delete vip temp file (does not change the host)
+  - name: Delete vip temp file (does not change the host)
     file:
       path: "{{ vip_temp_file.path }}"
       state: absent
     when: vip is defined and vip != ""
 
-  - name: delete patroni temp file (does not change the host)
+  - name: Delete patroni temp file (does not change the host)
     file:
       path: "{{ patroni_temp_file.path }}"
       state: absent
