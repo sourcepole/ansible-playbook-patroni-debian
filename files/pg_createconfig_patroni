@@ -229,7 +229,7 @@ cat /etc/patroni/config.yml.in |		\
         -e "s#@REPL_NETWORK@#${REPL_NETWORK}#g"	\
         -e "s/@API_PORT@/${API_PORT}/g"		\
         -e "s/@PORT@/${PORT}/g"			\
-        -e "s/@DCS_CONFIG@/${DCS_CONFIG}/g"	\
+        -e "s#@DCS_CONFIG@#${DCS_CONFIG}#g"	\
 >> $CONFIG_FILE
 
 # write vip configuration, if requested
