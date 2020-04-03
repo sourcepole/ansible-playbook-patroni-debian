@@ -1,10 +1,10 @@
 - block:
   - set_fact:
-      protocol: https
+      etcd_proto: https
     when: use_certificates is defined and use_certificates
 
   - set_fact:
-      protocol: http
+      etcd_proto: http
     when: use_certificates is not defined or not use_certificates
 
   - set_fact:
@@ -20,21 +20,21 @@
   - name: Listen for other cluster peers
     lineinfile:
       dest: "/etc/default/etcd"
-      line: "ETCD_LISTEN_PEER_URLS=\"{{ protocol }}://{{ etcd_host_ip }}:2380\""
+      line: "ETCD_LISTEN_PEER_URLS=\"{{ etcd_proto }}://{{ etcd_host_ip }}:2380\""
       regexp: ".*ETCD_LISTEN_PEER_URLS.*"
     notify: restart etcd
   
   - name: Setup advertised peer communication URL
     lineinfile:
       dest: "/etc/default/etcd"
-      line: "ETCD_INITIAL_ADVERTISE_PEER_URLS=\"{{ protocol }}://{{ etcd_host_ip }}:2380\""
+      line: "ETCD_INITIAL_ADVERTISE_PEER_URLS=\"{{ etcd_proto }}://{{ etcd_host_ip }}:2380\""
       regexp: ".*ETCD_INITIAL_ADVERTISE_PEER_URLS.*"
     notify: restart etcd
   
   - name: Enable client listen interface
     lineinfile:
       dest: "/etc/default/etcd"
-      line: "ETCD_LISTEN_CLIENT_URLS=\"{{ protocol }}://localhost:2379,{{ protocol }}://{{ etcd_host_ip }}:2379\""
+      line: "ETCD_LISTEN_CLIENT_URLS=\"{{ etcd_proto }}://localhost:2379,{{ etcd_proto }}://{{ etcd_host_ip }}:2379\""
       regexp: ".*ETCD_LISTEN_CLIENT_URLS.*"
     notify: restart etcd
   
@@ -42,7 +42,7 @@
   - name: Advertise client interface
     lineinfile:
       dest: "/etc/default/etcd"
-      line: "ETCD_ADVERTISE_CLIENT_URLS=\"{% for ip in dcs_ips %}{{ protocol }}://{{ ip }}:2379{% if not loop.last %},{% endif %}{% endfor %}\""
+      line: "ETCD_ADVERTISE_CLIENT_URLS=\"{% for ip in dcs_ips %}{{ etcd_proto }}://{{ ip }}:2379{% if not loop.last %},{% endif %}{% endfor %}\""
       regexp: ".*ETCD_ADVERTISE_CLIENT_URLS.*"
     notify: restart etcd
   
@@ -50,7 +50,7 @@
   - name: Setup URLs of initials members
     lineinfile:
       dest: "/etc/default/etcd"
-      line: "ETCD_INITIAL_CLUSTER=\"{% for host in groups['dcs_servers'] %}{{ host }}={{ protocol }}://{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}\""
+      line: "ETCD_INITIAL_CLUSTER=\"{% for host in groups['dcs_servers'] %}{{ host }}={{ etcd_proto }}://{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}\""
       regexp: ".*ETCD_INITIAL_CLUSTER.*"
     notify: restart etcd
 
