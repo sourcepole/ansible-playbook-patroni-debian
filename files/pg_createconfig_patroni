@@ -148,7 +148,7 @@ if [ -n "$VIP_IP" ]; then
         exit 1
     fi
     VIP_KEY="/postgresql-common/${VERSION}-${CLUSTER}/leader"
-    DCS_TYPE="$(egrep -v '^[[:space:]]*$|^ *#' /etc/patroni/dcs.yml | egrep '(etcd|consul|zookeeper)' | sed s/:.*//)"
+    DCS_TYPE="$(egrep -v '^[[:space:]]*$|^ *#' /etc/patroni/dcs.yml | egrep '^(etcd|consul|zookeeper):' | sed s/:.*//)"
     if [ -z "$DCS_TYPE" ]; then
         echo "DCS type could not be determined from /etc/patroni/dcs.yml, cannot write VIP file"
 	exit 1
