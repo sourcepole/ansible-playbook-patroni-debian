@@ -26,9 +26,12 @@
     state: present
   when: dcs == "etcd"
 
+# we need a vip-manager with etcd tls auth enabled
+#
+# see build instructions here https://salsa.debian.org/tpo/vip-manager/-/blob/master/README.build.debian
 - name: Install vip-manager package
   package:
-    name: vip-manager
+    name: vip-manager=0.6+ds-4.tpo
     state: present
   when: vip is defined and vip != ""
 

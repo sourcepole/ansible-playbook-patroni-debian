@@ -113,11 +113,20 @@ When the `vip` variable is set to an IP address, an appropriate configuration
 file for `vip-manager` will be written and the cluster-specific `vip-manager`
 service will be started.
 
-Etcd with certificate based authentication
-------------------------------------------
+Etcd with TLS authentication
+----------------------------
 
 Configuring etcd to use certificate based, authenticated connections is
-supported. Please set:
+supported.
+
+However you need a vip-manager that supports authentication for that. See
+[this pull request](https://github.com/cybertec-postgresql/vip-manager/pull/28).
+An accordingly patched vip-manager can be found
+[here](https://github.com/tpo/vip-manager/tree/tpo-master). The build
+instructions for a respective Debian package are
+[here](https://salsa.debian.org/tpo/vip-manager/-/blob/master/README.build.debian).
+
+In order to use etcd TLS based authentication please set:
 
     use_certificates: true
 
