@@ -1,9 +1,14 @@
 - name: Install etcd-client
   apt: pkg=etcd-client
 
+# it seems like our current setup is only v2 compatible, so
+# use v2 client settings for the time being
+#
 - name: Configure etcdctl settings
   lineinfile:
     dest: "/root/.bashrc"
-    line: 'export ETCDCTL_API=3; export ETCDCTL_CACERT=/etc/etcd/ca.cert.pem; export ETCDCTL_CERT=/etc/etcd/{{ ansible_hostname }}.cert.pem; export ETCDCTL_KEY=/etc/etcd/{{ ansible_hostname }}.key.pem; export ETCDCTL_ENDPOINTS="{{ etcd_proto }}://{{ etcd_host_ip }}:2379,http://{{ etcd_host_ip }}:4001"'
-    regexp: "^export ETCDCTL_API=3; export ETCDCTL_CACERT.*"
+    # v3
+    # line: 'export ETCDCTL_API=3; export ETCDCTL_CACERT=/etc/etcd/ca.cert.pem; export ETCDCTL_CERT=/etc/etcd/{{ ansible_hostname }}.cert.pem; export ETCDCTL_KEY=/etc/etcd/{{ ansible_hostname }}.key.pem; export ETCDCTL_ENDPOINTS="{{ etcd_proto }}://{{ etcd_host_ip }}:2379,http://{{ etcd_host_ip }}:4001"'
+    line: 'export ETCDCTL_API=2; export ETCDCTL_CA_FILE=/etc/etcd/ca.cert.pem; export ETCDCTL_CERT_FILE=/etc/etcd/{{ ansible_hostname }}.cert.pem; export ETCDCTL_KEY_FILE=/etc/etcd/{{ ansible_hostname }}.key.pem; export ETCDCTL_ENDPOINT="{{ etcd_proto }}://{{ etcd_host_ip }}:2379,http://{{ etcd_host_ip }}:4001"'
+    regexp: "^export ETCDCTL_API="
   when: use_certificates is defined and use_certificates
