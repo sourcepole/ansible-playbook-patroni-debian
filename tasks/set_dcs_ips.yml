@@ -1,7 +1,7 @@
 - block:
   - set_fact:
       dcs_ips: "{{ dcs_ips | default([])+ [hostvars[item]['ansible_eth0']['ipv4']['address']] }}"
-    with_items: "{{ groups['dcs_servers'] }}"
+    with_items: "{{ groups[dcs_servers_group] }}"
     when: dcs_server_ips is not defined
   
   - set_fact:

@@ -63,6 +63,10 @@ The following useful variables can be set:
 
  * `dcs` (`etcd` (default), `consul` or `zookeeper`)
  * `dcs_server_ips` (default: undefined, if set will override `dcs_servers` - see below)
+ * `dcs_servers_group` (default: `dcs_servers`, name of the inventory group that contains
+   the inventory\_names of the dcs\_servers)
+ * `pgsql_servers_group` (default: `pgsql_servers`, name of the inventory group that contains
+   the inventory\_names of the pgsql\_servers)
  * `postgresql_cluster_name` (default: test)
  * `postgresql_major_version` (default: 11)
  * `postgresql_data_dir_base` (default: `/var/lib/postgresql`)

@@ -3,6 +3,11 @@ dcs: "etcd"
 #dcs_server_ips:
 #  - 10.0.0.1
 #  - 10.0.0.2
+# inventory group that contains the inventory_names of the
+# dcs_servers
+dcs_servers_group: dcs_servers
+# same as previous for pgsql servers
+pgsql_servers_group: pgsql_servers
 dcs_port:
   consul:    8500
   zookeeper: 2181

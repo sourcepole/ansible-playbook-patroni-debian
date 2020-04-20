@@ -22,7 +22,7 @@
         server_subj: "/C=CH/ST=GR/L=Maladers/O=Example Org/CN={{ server_name_loop }}"
         # Server certificate should be valid for 10 years
         server_days: 3650
-      loop: "{{ groups['dcs_servers'] + groups['pgsql_servers'] }}"
+      loop: "{{ groups[dcs_servers_group] + groups[pgsql_servers_group] }}"
       loop_control:
         loop_var: server_name_loop
       tags: CA
