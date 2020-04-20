@@ -39,8 +39,8 @@
   become_user: root
   become_method: sudo
 
-  tasks:
-    - include: tasks/{{ dcs }}.yml
+  roles:
+    - {{ dcs }}
 
 
 - name: Setup Postgres Servers

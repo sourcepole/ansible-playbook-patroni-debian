@@ -50,7 +50,7 @@
   - name: Setup URLs of initials members
     lineinfile:
       dest: "/etc/default/etcd"
-      line: "ETCD_INITIAL_CLUSTER=\"{% for host in groups['dcs_servers'] %}{{ host }}={{ etcd_proto }}://{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}\""
+      line: "ETCD_INITIAL_CLUSTER=\"{% for host in groups[dcs_servers_group] %}{{ host }}={{ etcd_proto }}://{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}\""
       regexp: ".*ETCD_INITIAL_CLUSTER.*"
     notify: restart etcd
 
