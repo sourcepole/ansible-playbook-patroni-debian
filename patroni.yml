@@ -38,7 +38,6 @@
   become: true
   become_user: root
   become_method: sudo
-
   roles:
     - {{ dcs }}
 
@@ -63,8 +62,9 @@
       tags:
         - config
 
-  tasks:
-    - include: tasks/consul.yml
+  role:
+    - role: consul
       when: dcs == "consul"
+  tasks:
     - include: tasks/postgresql.yml
     - include: tasks/patroni.yml
