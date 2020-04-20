@@ -35,7 +35,7 @@
 
 - name: Copy pgpass from template
   template:
-    src: templates/postgres_pgpass
+    src: postgres_pgpass
     dest: /var/lib/postgresql/.pgpass
     mode: 0600
     owner: "postgres"

@@ -38,7 +38,7 @@
 - block:
   - name: Deploy patroni DCS config
     template:
-      src: templates/dcs.yml
+      src: dcs.yml
       dest: /etc/patroni/dcs.yml
       mode: 0640
       owner: "postgres"
@@ -47,14 +47,14 @@
   
   - name: Deploy patroni config templates
     template:
-      src: templates/config.yml.in
+      src: config.yml.in
       dest: /etc/patroni/config.yml.in
       mode: 0640
       owner: "postgres"
       group: "postgres"
     notify: restart patroni
   
-  - include: tasks/create_patroni_config_file.yml
+  - include: create_patroni_config_file.yml
 
   - name: make sure patroni is running
     systemd:

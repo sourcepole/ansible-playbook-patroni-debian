@@ -65,6 +65,5 @@
   role:
     - role: consul
       when: dcs == "consul"
-  tasks:
-    - include: tasks/postgresql.yml
-    - include: tasks/patroni.yml
+    - postgres
+    - patroni
