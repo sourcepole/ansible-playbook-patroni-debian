@@ -42,9 +42,13 @@ patroni_postgres_pass: ""
 #vip_manager_hetzner_pass: hetzner_webapi_password
 
 #vip_manager_hetzner_type: "hetzner_floating_ip"
+#
+# you'll need a vip-manager version that supports Floating IPs,
+# such as this http://github.com/tpo/vip-manager/
+#
 # API token
 #vip_manager_hetzner_tokn: "DXuia61JJaLJ2Je2jZjrnQ4zm7VcLTYvoo9dV5hpNGwgvM8mI9790niVt1IbN0sE"
 # server ID
-#vip_manager_hetzner_tokn: "206698"
+#vip_manager_hetzner_serv: "4319862"
 # IP ID
 #vip_manager_hetzner_ipid: "206698"
