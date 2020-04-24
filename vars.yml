@@ -1,8 +1,5 @@
 ---
 dcs: "etcd"
-#dcs_server_ips:
-#  - 10.0.0.1
-#  - 10.0.0.2
 # inventory group that contains the inventory_names of the
 # dcs_servers
 dcs_servers_group: dcs_servers
@@ -19,11 +16,11 @@ postgresql_major_version: "11"
 postgresql_data_dir_base: "/var/lib/postgresql"
 
 # network that can do queries
-# by default network of eth0 IP address is used
+# by default network of default IP address is used
 #postgresql_network: "10.0.0.016"
 
 # network that can do replication
-# by default network of eth0 IP address is used
+# by default network of default IP address is used
 #postgresql_replication_network: "10.0.0.0/16"
 
 patroni_replication_user: "replicator"

@@ -125,7 +125,7 @@ ETCD_INITIAL_ADVERTISE_PEER_URLS="{{ etcd_proto }}://{{ etcd_host_ip }}:2380"
 ## `--name` flag.
 ## default: "default=http://localhost:2380"
 # ETCD_INITIAL_CLUSTER="default=http://localhost:2380"
-ETCD_INITIAL_CLUSTER="{% for host in groups[dcs_servers_group] %}{{ host }}={{ etcd_proto }}://{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}:2380{% if not loop.last %},{% endif %}{% endfor %}"
+ETCD_INITIAL_CLUSTER="{% for host in dcs_hosts %}{{ host.0 }}={{ etcd_proto }}://{{ host.1 }}:2380{% if not loop.last %},{% endif %}{% endfor %}"
 
 ##### --initial-cluster-state
 ## Initial cluster state ("new" or "existing"). Set to `new` for all members

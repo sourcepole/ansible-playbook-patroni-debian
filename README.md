@@ -69,7 +69,6 @@ Variables
 The following useful variables can be set: 
 
  * `dcs` (`etcd` (default), `consul` or `zookeeper`)
- * `dcs_server_ips` (default: undefined, if set will override `dcs_servers` - see below)
  * `dcs_servers_group` (default: `dcs_servers`, name of the inventory group that contains
    the inventory\_names of the dcs\_servers)
  * `pgsql_servers_group` (default: `pgsql_servers`, name of the inventory group that contains
@@ -77,9 +76,9 @@ The following useful variables can be set:
  * `postgresql_cluster_name` (default: test)
  * `postgresql_major_version` (default: 11)
  * `postgresql_data_dir_base` (default: `/var/lib/postgresql`)
- * `postgresql_network` (default: network of eth0 interface)
+ * `postgresql_network` (default: network of default interface)
    network that access postgres and do queries. md5 auth is required.
- * `postgresql_repl_network` (default: network of eth0 interface)
+ * `postgresql_repl_network` (default: network of default interface)
    network that can do replication. md5 auth is required.
  * `patroni_replication_user` (default: `replicator`)
  * `patroni_replication_pass`
@@ -87,9 +86,6 @@ The following useful variables can be set:
  * `vip`
  * `vip_manager_hetzner*` (configures Hetzner Floating or Failover IPs - see [vars.yml])
  * `use_certificates` (only applies to `etcd` DCS, default: false, see below)
-
-If `dcs_server_ips` is set, then it will be used. If not set, then the IPs of
-hosts of the `dcs_servers` inventory group will be used.
 
 Example: `ansible-playbook -i inventory -e dcs=consul patroni.yml`
 

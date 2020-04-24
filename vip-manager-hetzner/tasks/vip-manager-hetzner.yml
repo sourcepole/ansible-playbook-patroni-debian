@@ -41,6 +41,6 @@
   register: vip_interface
 
 - name: Reload VIP interface
-  command: ifup --force eth0:1
+  command: "ifup --force {{ ansible_default_ipv4.interface }}:1"
   when: vip_interface.changed
 

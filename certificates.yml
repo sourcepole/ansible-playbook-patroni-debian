@@ -18,7 +18,7 @@
           tags: CA
       vars:
         server_name: "{{ server_name_loop }}"
-        server_subjectAlternativeName: "DNS:{{ server_name_loop }},IP:{{ hostvars[server_name_loop]['ansible_eth0']['ipv4']['address'] }}"
+        server_subjectAlternativeName: "DNS:{{ server_name_loop }},IP:{{ hostvars[server_name_loop].ansible_default_ipv4.address }}"
         server_subj: "/C=CH/ST=GR/L=Maladers/O=Example Org/CN={{ server_name_loop }}"
         # Server certificate should be valid for 10 years
         server_days: 3650

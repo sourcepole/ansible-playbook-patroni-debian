@@ -1,12 +1,13 @@
 - block:
-  - set_fact:
-      dcs_ips: "{{ dcs_ips | default([])+ [hostvars[item]['ansible_eth0']['ipv4']['address']] }}"
-    with_items: "{{ groups[dcs_servers_group] }}"
-    when: dcs_server_ips is not defined
-  
-  - set_fact:
-      dcs_ips: "{{ dcs_server_ips }}"
+
+  - fail:
+      msg: "the `dcs_server_ips` variable was supported in the past but is **NOT** supported any more!"
     when: dcs_server_ips is defined
+
+  - set_fact:
+      dcs_ips:   "{{ ( dcs_ips   | default([]) ) + [         hostvars[item].ansible_default_ipv4.address]   }}"
+      dcs_hosts: "{{ ( dcs_hosts | default([]) ) + [ [ item, hostvars[item].ansible_default_ipv4.address] ] }}"
+    with_items: "{{ groups[dcs_servers_group] }}"
 
   # block tags
   tags: always
