@@ -128,14 +128,11 @@ service will be started.
 Etcd with TLS authentication
 ----------------------------
 
-Configuring etcd to use certificate based, authenticated connections is
+Configuring etcd to use tls/certificate based, authenticated connections is
 supported.
 
-However you need a vip-manager that supports authentication for that. See
-[this pull request](https://github.com/cybertec-postgresql/vip-manager/pull/28).
-An accordingly patched vip-manager can be found
-[here](https://github.com/tpo/vip-manager/tree/tpo-master). The build
-instructions for a respective Debian package are
+However you need a vip-manager that supports authentication for that, like f.ex
+[https://github.com/tpo/vip-manager/]. Build instructions for a Debian package are
 [here](https://salsa.debian.org/tpo/vip-manager/-/blob/master/README.build.debian).
 
 In order to use etcd TLS based authentication please set:
