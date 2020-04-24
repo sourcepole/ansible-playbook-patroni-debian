@@ -1,11 +1,17 @@
-Ansible Playbook for Patroni on Debian
-======================================
+Ansible Roles for Patroni on Debian
+===================================
 
 This Ansible playbook allows to deploy a Patroni cluster.
 
 It is an enhanced fork of [credativ's playbook](https://github.com/credativ/ansible-playbook-patroni-debian).
-Please consult the [commit log](https://github.com/sourcepole/ansible-playbook-patroni-debian/commits/master)
-to see the changes.
+It has these additional features:
+
+* etcd tls authentication and transport over HTTPS support
+* support multiple etcd endpoints
+* support rerunning the roles/playbooks without messing up the cluster
+* additional documentation
+* allow to define network that has can access postgres' replication
+* structured in roles, so that you can use it from any playbook
 
 There's a [howto article](https://www.credativ.com/blog/integrating-patroni-debian)
 on how to use this playbook.
