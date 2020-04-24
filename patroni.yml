@@ -67,3 +67,5 @@
       when: dcs == "consul"
     - postgres
     - patroni
+    # if you want to use Hetzner Floating or Failover IPs
+    #- vip-manager-hetzner
