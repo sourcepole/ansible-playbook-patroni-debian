@@ -41,66 +41,7 @@
       dest: /etc/etcd
     notify: restart etcd
 
-  - debug: msg="Setup client authentication"
-
-  - name: Set CA file
-    lineinfile:
-      dest: "/etc/default/etcd"
-      line: "ETCD_CA_FILE=\"/etc/etcd/ca.cert.pem\""
-      regexp: ".*ETCD_CA_FILE.*"
-    notify: restart etcd
-
-  - name: Set server certificate file
-    lineinfile:
-      dest: "/etc/default/etcd"
-      line: "ETCD_CERT_FILE=\"/etc/etcd/{{ ansible_hostname }}.cert.pem\""
-      regexp: ".*ETCD_CERT_FILE.*"
-    notify: restart etcd
-  
-  - name: Set server key file
-    lineinfile:
-      dest: "/etc/default/etcd"
-      line: "ETCD_KEY_FILE=\"/etc/etcd/{{ ansible_hostname }}.key.pem\""
-      regexp: ".*ETCD_KEY_FILE.*"
-    notify: restart etcd
-
-  - name: Enable client certificate authentication
-    lineinfile:
-      dest: "/etc/default/etcd"
-      line: "ETCD_CLIENT_CERT_AUTH=\"true\""
-      regexp: ".*ETCD_CLIENT_CERT_AUTH.*"
-    notify: restart etcd
-
-  - debug: msg="Setup peer authentication"
-
-  - name: Set CA file
-    lineinfile:
-      dest: "/etc/default/etcd"
-      line: "ETCD_PEER_TRUSTED_CA_FILE=\"/etc/etcd/ca.cert.pem\""
-      regexp: ".*ETCD_PEER_TRUSTED_CA_FILE.*"
-    notify: restart etcd
-
-  - name: Set server certificate file
-    lineinfile:
-      dest: "/etc/default/etcd"
-      line: "ETCD_PEER_CERT_FILE=\"/etc/etcd/{{ ansible_hostname }}.cert.pem\""
-      regexp: ".*ETCD_PEER_CERT_FILE.*"
-    notify: restart etcd
-  
-  - name: Set server key file
-    lineinfile:
-      dest: "/etc/default/etcd"
-      line: "ETCD_PEER_KEY_FILE=\"/etc/etcd/{{ ansible_hostname }}.key.pem\""
-      regexp: ".*ETCD_PEER_KEY_FILE.*"
-    notify: restart etcd
-
-  - name: Enable client certificate authentication
-    lineinfile:
-      dest: "/etc/default/etcd"
-      line: "ETCD_PEER_CLIENT_CERT_AUTH=\"true\""
-      regexp: ".*ETCD_PEER_CLIENT_CERT_AUTH.*"
-    notify: restart etcd
-
   # block tag:
   tags:
+    - etcd
     - config
