@@ -1,0 +1,46 @@
+- name: Set VIP to use Hetzner VIP service
+  lineinfile:
+    dest: "/etc/patroni/{{ postgresql_major_version }}-{{ postgresql_cluster_name }}.vip"
+    line: "HOSTING_TYPE=\"{{ vip_manager_hetzner_type }}\""
+    regexp: "^HOSTING_TYPE=.*"
+  notify: restart vip-manager
+
+- name: Configure Hetzner FailoverIP credentials
+  copy:
+    content: |
+        # Failover IP
+        ip={{ vip }}
+        # Webservice-Login (https://robot.your-server.de/preferences)
+        user='{{ vip_manager_hetzner_user }}'
+        pass='{{ vip_manager_hetzner_pass }}'
+    dest: /etc/hetzner
+    mode: go-rw
+  when: vip_manager_hetzner_type == "hetzner"
+  notify: restart vip-manager
+  
+- name: Configure Hetzner FloatingIP credentials
+  copy:
+    content: |
+        # Failover IP
+        # ip={{ vip }}
+        # Webservice-Login (https://robot.your-server.de/preferences)
+        tokn='{{ vip_manager_hetzner_tokn }}'
+        # retrieve ipid with `curl -H "Authorization: Bearer $tokn" 'https://api.hetzner.cloud/v1/floating_ips'`
+        ipid='{{ vip_manager_hetzner_ipid }}'
+        # retrieve serv id with `curl -H "Authorization: Bearer $tokn" 'https://api.hetzner.cloud/v1/servers'`
+        serv='{{ vip_manager_hetzner_serv }}'
+    dest: /etc/hetzner
+    mode: go-rw
+  when: vip_manager_hetzner_type == "hetzner_floating_ip"
+  notify: restart vip-manager
+  
+- name: Add VIP interface config à la Hetzner
+  template:
+    src: vip-if.cfg
+    dest: /etc/network/interfaces.d/vip.cfg
+  register: vip_interface
+
+- name: Reload VIP interface
+  command: ifup --force eth0:1
+  when: vip_interface.changed
+

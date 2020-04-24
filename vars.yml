@@ -33,3 +33,18 @@ patroni_replication_pass: "replicator"
 patroni_postgres_pass: ""
 # vip-manager will manage the vip on each node if set
 #vip: "10.0.1.1"
+
+#vip_manager_hetzner_type: hetzner
+# you need to create these in robot.your-server.de
+# User Icon -> Settings -> Webservice- and App-Settings
+# -> Webservice-/App-Access
+#vip_manager_hetzner_user: hetzner_webapi_user
+#vip_manager_hetzner_pass: hetzner_webapi_password
+
+#vip_manager_hetzner_type: "hetzner_floating_ip"
+# API token
+#vip_manager_hetzner_tokn: "DXuia61JJaLJ2Je2jZjrnQ4zm7VcLTYvoo9dV5hpNGwgvM8mI9790niVt1IbN0sE"
+# server ID
+#vip_manager_hetzner_tokn: "206698"
+# IP ID
+#vip_manager_hetzner_ipid: "206698"

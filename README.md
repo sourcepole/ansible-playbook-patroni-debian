@@ -9,6 +9,7 @@ It has these additional features:
 * etcd tls authentication and transport over HTTPS support
 * support multiple etcd endpoints
 * support rerunning the roles/playbooks without messing up the cluster
+* support for Hetzner Floating IPs
 * additional documentation
 * allow to define network that has can access postgres' replication
 * structured in roles, so that you can use it from any playbook
@@ -84,6 +85,7 @@ The following useful variables can be set:
  * `patroni_replication_pass`
  * `patroni_postgres_pass`
  * `vip`
+ * `vip_manager_hetzner*` (configures Hetzner Floating or Failover IPs - see [vars.yml])
  * `use_certificates` (only applies to `etcd` DCS, default: false, see below)
 
 If `dcs_server_ips` is set, then it will be used. If not set, then the IPs of

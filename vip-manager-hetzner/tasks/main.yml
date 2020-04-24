@@ -1,0 +1,3 @@
+- include: vip-manager-hetzner.yml
+  tags: vip_manager_hetzner
+
