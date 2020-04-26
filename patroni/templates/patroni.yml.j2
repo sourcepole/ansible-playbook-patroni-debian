@@ -1,12 +1,12 @@
-scope: "@VERSION@-@CLUSTER@"
+scope: "{{ postgresql_major_version}}-{{ postgresql_cluster_name }}"
 namespace: "/postgresql-common/"
-name: @HOSTNAME@
+name: {{ ansible_hostname }}
 
-@DCS_CONFIG@
+{% include "dcs.yml.j2" %}
 
 restapi:
-  listen: @HOSTIP@:@API_PORT@
-  connect_address: @HOSTIP@:@API_PORT@
+  listen: {{ ansible_default_ipv4.address }}:{{ api_port }}
+  connect_address: {{ ansible_default_ipv4.address }}:{{ api_port }}
 #  certfile: /etc/ssl/certs/ssl-cert-snakeoil.pem
 #  keyfile: /etc/ssl/private/ssl-cert-snakeoil.key
 #  authentication:
@@ -62,11 +62,11 @@ bootstrap:
       - local   all             all                                     peer
       - host    all             all             127.0.0.1/32            md5
       - host    all             all             ::1/128                 md5
-      - host    all             all             @NETWORK@               md5
+      - host    all             all             {{ postgresql_network }}         md5
       - local   replication     all                                     peer
       - host    replication     all             127.0.0.1/32            md5
       - host    replication     all             ::1/128                 md5
-      - host    replication     all             @REPL_NETWORK@          md5
+      - host    replication     all             {{ postgresql_repl_network }}        md5
 
 postgresql:
   # Custom clone method
@@ -75,13 +75,13 @@ postgresql:
   pg_clonecluster:
     command: /usr/share/patroni/pg_clonecluster_patroni
 
-  listen: "@HOSTIP@,127.0.0.1:@PORT@"
-  connect_address: @HOSTIP@:@PORT@
+  listen: "{{ ansible_default_ipv4.address }},127.0.0.1:{{ postgresql_port }}"
+  connect_address: {{ ansible_default_ipv4.address }}:{{ postgresql_port }}
   use_unix_socket: true
-  data_dir: {{ postgresql_data_dir_base }}/@VERSION@/@CLUSTER@
-  bin_dir: /usr/lib/postgresql/@VERSION@/bin
-  config_dir: /etc/postgresql/@VERSION@/@CLUSTER@
-  pgpass: /var/lib/postgresql/@VERSION@-@CLUSTER@.pgpass
+  data_dir: {{ postgresql_data_dir_base }}/{{ postgresql_major_version}}/{{ postgresql_cluster_name }}
+  bin_dir: /usr/lib/postgresql/{{ postgresql_major_version}}/bin
+  config_dir: /etc/postgresql/{{ postgresql_major_version}}/{{ postgresql_cluster_name }}
+  pgpass: /var/lib/postgresql/{{ postgresql_major_version}}-{{ postgresql_cluster_name }}.pgpass
   authentication:
     replication:
       username: "{{ patroni_replication_user }}"
@@ -101,4 +101,4 @@ postgresql:
     # Emulate default Debian/Ubuntu logging
     logging_collector: 'on'
     log_directory: '/var/log/postgresql'
-    log_filename: 'postgresql-@VERSION@-@CLUSTER@.log'
+    log_filename: 'postgresql-{{ postgresql_major_version}}-{{ postgresql_cluster_name }}.log'

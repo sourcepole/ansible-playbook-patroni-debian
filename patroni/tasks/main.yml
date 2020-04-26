@@ -1,4 +1,6 @@
 ---
+# TODO: split this
+# TODO: "config" tag doesn't make any sense or does it?
 
 - import_tasks: systemd-backports.yml
   when: (ansible_distribution_release == "stretch")
@@ -33,23 +35,23 @@
   when: vip is defined and vip != ""
 
 - block:
-  - name: Deploy patroni DCS config
-    template:
-      src: dcs.yml
-      dest: /etc/patroni/dcs.yml
-      mode: 0640
-      owner: "postgres"
-      group: "postgres"
-    notify: restart patroni
-  
-  - name: Deploy patroni config templates
-    template:
-      src: config.yml.in
-      dest: /etc/patroni/config.yml.in
-      mode: 0640
-      owner: "postgres"
-      group: "postgres"
-    notify: restart patroni
+#  - name: Deploy patroni DCS config
+#    template:
+#      src: dcs.yml
+#      dest: /etc/patroni/dcs.yml
+#      mode: 0640
+#      owner: "postgres"
+#      group: "postgres"
+#    notify: restart patroni
+# 
+#  - name: Deploy patroni config templates
+#    template:
+#      src: config.yml.in
+#      dest: /etc/patroni/config.yml.in
+#      mode: 0640
+#      owner: "postgres"
+#      group: "postgres"
+#    notify: restart patroni
   
   - include: create_patroni_config_file.yml
 

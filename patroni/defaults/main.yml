@@ -1,0 +1,3 @@
+postgresql_port: "5432"
+postgresql_network: "{{ ansible_default_ipv4.network }}"
+postgresql_repl_network: "{{ ansible_default_ipv4.network }}"

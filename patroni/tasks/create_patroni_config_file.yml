@@ -2,14 +2,6 @@
 
 - block:
 
-  - name: Install patched pg_createconfig_patroni
-    copy:
-      src: pg_createconfig_patroni
-      dest: /usr/bin/pg_createconfig_patroni
-
-  # the "Create patroni configuration" task below always changes the file, so we check ourselves
-  # if it changed...
-  #
   - set_fact:
       patroni_config_file: "/etc/patroni/{{ postgresql_major_version }}-{{ postgresql_cluster_name }}.yml"
       vip_config_file:     "/etc/patroni/{{ postgresql_major_version }}-{{ postgresql_cluster_name }}.vip"
@@ -18,10 +10,6 @@
     tempfile:
     register: vip_temp_file
     when: vip is defined and vip != ""
-    
-  - name: Create patroni temp file (does not change the host)
-    tempfile:
-    register: patroni_temp_file
     
   - name: Make copy of vip config file (does not change the host)
     copy:
@@ -32,25 +20,20 @@
     failed_when: false
     when: vip is defined and vip != ""
   
-  - name: Make copy of patroni config file (does not change the host)
-    copy:
-      remote_src: yes
-      src: "{{ patroni_config_file }}"
-      dest: "{{ patroni_temp_file.path }}"
-    # never fail, first time there's no src
-    failed_when: false
-  
   - name: Create patroni configuration
-    command: >
-      pg_createconfig_patroni
-        --force
-        --hostip={{ ansible_default_ipv4.address }}
-        {% if postgresql_port is defined         %}--port={{         postgresql_port         }}{% endif %}
-        {% if postgresql_network is defined      %}--network={{      postgresql_network      }}{% endif %}
-        {% if postgresql_repl_network is defined %}--repl-network={{ postgresql_repl_network }}{% endif %}
-        {% if vip is defined                     %}--vip={{          vip                     }}{% endif %}
-        {{ postgresql_major_version }}
-        {{ postgresql_cluster_name }}
+    include: replace_create_patroni_config_file.yml
+
+# - name: Create patroni configuration
+#   command: >
+#     pg_createconfig_patroni
+#       --force
+#       --hostip={{ ansible_default_ipv4.address }}
+#       {% if postgresql_port is defined         %}--port={{         postgresql_port         }}{% endif %}
+#       {% if postgresql_network is defined      %}--network={{      postgresql_network      }}{% endif %}
+#       {% if postgresql_repl_network is defined %}--repl-network={{ postgresql_repl_network }}{% endif %}
+#       {% if vip is defined                     %}--vip={{          vip                     }}{% endif %}
+#       {{ postgresql_major_version }}
+#       {{ postgresql_cluster_name }}
   
   - name: Copy vip config to temp file (does not change the host)
     copy:
@@ -60,24 +43,11 @@
     notify: restart vip-manager
     when: vip is defined and vip != ""
   
-  - name: Copy patroni config to temp file (does not change the host)
-    copy:
-      remote_src: yes
-      src: "{{ patroni_config_file }}"
-      dest: "{{ patroni_temp_file.path }}"
-    notify: restart patroni
-    when: vip is defined and vip != ""
-
   - name: Delete vip temp file (does not change the host)
     file:
       path: "{{ vip_temp_file.path }}"
       state: absent
     when: vip is defined and vip != ""
-
-  - name: Delete patroni temp file (does not change the host)
-    file:
-      path: "{{ patroni_temp_file.path }}"
-      state: absent
 
   # block tag:
   tags: config
