@@ -122,6 +122,14 @@ When the `vip` variable is set to an IP address, an appropriate configuration
 file for `vip-manager` will be written and the cluster-specific `vip-manager`
 service will be started.
 
+This playbook expects the systemd unit files for `vip-manager` to use it's
+`-config` parameter instead of listing all settings on the command line. That
+way `vip-manager` settings can be configured in its configuration yaml file.
+
+This [fork](https://salsa.debian.org/tpo/vip-manager) of the Debian package for
+`vip-manager` supports passing the configuration in the systemd unit file via
+the `-config` parameter.
+
 Etcd with TLS authentication
 ----------------------------
 
