@@ -1,6 +1,6 @@
 ---
 - name: Setup facts
-  hosts: dcs_servers, pgsql_servers
+  hosts: "{{ dcs_servers_group }}", "{{ pgsql_servers_group }}"
   vars_files:
     - vars.yml
   handlers:
@@ -25,7 +25,7 @@
 #- import_playbook: certificates.yml
 
 - name: Setup DCS servers
-  hosts: dcs_servers
+  hosts: "{{ dcs_servers_group }}"
   vars_files:
     - vars.yml
   vars:
@@ -43,7 +43,7 @@
 
 
 - name: Setup Postgres Servers
-  hosts: pgsql_servers
+  hosts: "{{ pgsql_servers_group }}"
   handlers:
     - include: handlers.yml
   become: true
@@ -58,7 +58,7 @@
       delegate_to: "{{ item }}"
       delegate_facts: True
       when: hostvars[item]['ansible_default_ipv4'] is not defined
-      with_items: "{{ [ groups['dcs_servers'], groups['pgsql_servers'] ] | flatten }}"
+      with_items: "{{ [ groups[dcs_servers_group], groups[pgsql_servers_group] ] | flatten }}"
       tags:
         - config
 
