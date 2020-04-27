@@ -35,25 +35,17 @@
   when: vip is defined and vip != ""
 
 - block:
-#  - name: Deploy patroni DCS config
-#    template:
-#      src: dcs.yml
-#      dest: /etc/patroni/dcs.yml
-#      mode: 0640
-#      owner: "postgres"
-#      group: "postgres"
-#    notify: restart patroni
-# 
-#  - name: Deploy patroni config templates
-#    template:
-#      src: config.yml.in
-#      dest: /etc/patroni/config.yml.in
-#      mode: 0640
-#      owner: "postgres"
-#      group: "postgres"
-#    notify: restart patroni
   
+  - set_fact:
+      version_dash_cluster_name: "{{ postgresql_major_version }}-{{ postgresql_cluster_name }}"
+  
+  - set_fact:
+      patroni_config_file: "/etc/patroni/{{ version_dash_cluster_name }}.yml"
+      vip_config_file:     "/etc/patroni/{{ version_dash_cluster_name }}.vip"
+
   - include: create_patroni_config_file.yml
+
+  - include: create_vip-manager_config.yml
 
   - name: make sure patroni is running
     systemd:

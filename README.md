@@ -84,6 +84,7 @@ The following useful variables can be set:
  * `patroni_replication_pass`
  * `patroni_postgres_pass`
  * `vip`
+ * `vip_mask` (default: 32)
  * `vip_manager_hetzner*` (configures Hetzner Floating or Failover IPs - see [vars.yml])
  * `use_certificates` (only applies to `etcd` DCS, default: false, see below)
 

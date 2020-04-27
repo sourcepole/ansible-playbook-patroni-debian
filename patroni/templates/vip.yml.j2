@@ -1,0 +1,39 @@
+# the etcd or consul key which vip-manager will regularly poll.
+key: "/postgresql-common/{{ version_dash_cluster_name }}/leader"
+# if the value of the above key matches the NodeName (often the hostname of this host), vip-manager will try to add the virtual ip address to the interface specified in Iface
+nodename: "{{ ansible_hostname }}"
+
+ip: {{ vip }} # the virtual ip address to manage
+mask: {{ vip_mask }} # netmask for the virtual ip
+iface: {{ ansible_default_ipv4.interface }} #interface to which the virtual ip will be added
+
+# how the virtual ip should be managed. we currently support "ip addr add/remove" through shell commands or the Hetzner api
+hostingtype: {{ vip_manager_hetzner_type }} # possible values: basic, hetzner .
+
+endpoint_type: {{ dcs }} # etcd, zookeper or consul
+# a list that contains all endpoints to which etcd could talk. 
+endpoints:
+{% if dcs == 'consul' %}
+# We depend on a local patroni client
+  - "127.0.0.1:{{ dcs_port[dcs] }}"
+{% endif %}
+{% if dcs == 'zookeeper' %}
+{%   for ip in dcs_ips %}
+  - {{ ip }}:{{ dcs_port[dcs] }}
+{%   endfor %}
+{% endif %}
+{% if dcs == 'etcd' %}
+{%   for ip in dcs_ips %}
+  - {{ etcd_proto }}://{{ ip }}:{{ dcs_port[dcs] }}
+{%   endfor %}
+{% endif %}
+  # A single list-item is also fine.
+  # consul will always only use the first entry from this list.
+  # For consul, you'll obviously need to change the port to 8500. Unless you're using a different one. Maybe you're a rebel and are running consul on port 2379? Just to confuse people? Why would you do that? Oh, I get it.
+
+{% if use_certificates %}
+etcd_ca_file: "/etc/etcd/ca.cert.pem"
+etcd_cert_file: "/etc/etcd/{{ ansible_hostname }}.cert.pem"
+etcd_key_file: "/etc/etcd/{{ ansible_hostname }}.key.pem"
+{% endif %}
+

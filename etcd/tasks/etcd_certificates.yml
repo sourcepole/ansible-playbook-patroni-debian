@@ -1,12 +1,6 @@
 # howto: https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/security.md
 #
 - block:
-  # TODO: see comment on top of [../files/vip.in] !!!
-  - name: install /etc/patroni/vip.in with etcd settings
-    copy:
-      src: vip.in
-      dest: /etc/patroni
-  
   - name: Create /etc/etcd
     file:
       path: /etc/etcd
@@ -43,5 +37,4 @@
 
   # block tag:
   tags:
-    - etcd
     - config

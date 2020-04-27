@@ -1,0 +1,6 @@
+- name: Create vip-manager config
+  template:
+    src: vip.yml.j2
+    dest: "/etc/patroni/{{ version_dash_cluster_name }}.vip.yml"
+  notify: restart vip-manager
+
