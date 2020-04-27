@@ -22,7 +22,7 @@
 # Please use a different mechanism for creating a CA
 # and certificates if this one doesn't fit you.
 #
-#- import_playbook: certificates-sp.yml
+#- import_playbook: certificates.yml
 
 - name: Setup DCS servers
   hosts: dcs_servers
