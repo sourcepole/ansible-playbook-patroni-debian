@@ -14,9 +14,15 @@ restapi:
 #  certfile: /etc/ssl/certs/ssl-cert-snakeoil.pem
 #  keyfile: /etc/ssl/private/ssl-cert-snakeoil.key
 {% endif %}
+{% if patroni_restapi_username is defined %}
+  authentication:
+    username: {{ patroni_restapi_username }}
+    password: {{ patroni_restapi_password }}
+{% else %}
 #  authentication:
 #    username: username
 #    password: password
+{% endif %}
 
 # ctl:
 #   insecure: false # Allow connections to SSL sites without certs

@@ -34,7 +34,13 @@ patroni_postgres_pass: ""
 #patroni_restapi_key: /etc/letsencrypt/live/server.example.org/privkey.pem
 #patroni_restapi_cert: /etc/letsencrypt/live/server.example.org/cert.pem
 
+# optional: use username/password for patroni restapi service
+#
+#patroni_restapi_username: restapi_user
+#patroni_restapi_password: restapi_password
+
 # vip-manager will manage the vip on each node if set
+#
 #vip: "10.0.1.1"
 
 #vip_manager_hetzner_type: hetzner
