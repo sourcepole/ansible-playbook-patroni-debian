@@ -66,7 +66,9 @@ Note that Consul is unsupported as DCS on Debian 9 (stretch).
 Variables
 ---------
 
-The following useful variables can be set: 
+There is a lot that can be configured. Have a look at [vars.yml](vars.yml).
+
+The following are a few useful variables that can be set: 
 
  * `dcs` (`etcd` (default), `consul` or `zookeeper`)
  * `dcs_servers_group` (default: `dcs_servers`, name of the inventory group that contains
