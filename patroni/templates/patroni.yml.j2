@@ -7,8 +7,13 @@ name: {{ ansible_hostname }}
 restapi:
   listen: {{ ansible_default_ipv4.address }}:{{ api_port }}
   connect_address: {{ ansible_default_ipv4.address }}:{{ api_port }}
+{% if patroni_restapi_cert is defined %}
+  certfile: {{ patroni_restapi_cert }}
+  keyfile: {{ patroni_restapi_key }}
+{% else %}
 #  certfile: /etc/ssl/certs/ssl-cert-snakeoil.pem
 #  keyfile: /etc/ssl/private/ssl-cert-snakeoil.key
+{% endif %}
 #  authentication:
 #    username: username
 #    password: password
