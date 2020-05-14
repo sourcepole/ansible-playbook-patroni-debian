@@ -5,6 +5,19 @@
     - vars.yml
   handlers:
     - include: handlers.yml
+
+  pre_tasks:
+    # even if --limit is used with ansible we need to collect the IPs of all
+    # the hosts, in order to be able to configure the DCS and the DB cluster
+    #
+    - name: Gather facts from ALL hosts (regardless of limit or tags)
+      setup:
+      delegate_to: "{{ item }}"
+      delegate_facts: True
+      when: hostvars[item]['ansible_default_ipv4'] is not defined
+      with_items: "{{ [ groups[dcs_servers_group], groups[pgsql_servers_group] ] | flatten }}"
+      tags: always
+
   tasks:
     - include: tasks/set_dcs_ips.yml
       tags: always
@@ -52,6 +65,7 @@
   vars_files:
     - vars.yml
 
+  # TODO: do we need this here?
   pre_tasks:
     - name: Gather facts from ALL hosts (regardless of limit or tags)
       setup:
