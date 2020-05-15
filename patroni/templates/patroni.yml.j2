@@ -12,18 +12,11 @@ restapi:
   certfile: {{ patroni_restapi_certfile }}
   keyfile: {{ patroni_restapi_keyfile }}
   verify_client: {{ patroni_restapi_verify_client }}
-{% else %}
-#  certfile: /etc/ssl/certs/ssl-cert-snakeoil.pem
-#  keyfile: /etc/ssl/private/ssl-cert-snakeoil.key
 {% endif %}
 {% if patroni_restapi_username is defined %}
   authentication:
     username: {{ patroni_restapi_username }}
     password: {{ patroni_restapi_password }}
-{% else %}
-#  authentication:
-#    username: username
-#    password: password
 {% endif %}
 
 # ctl:
