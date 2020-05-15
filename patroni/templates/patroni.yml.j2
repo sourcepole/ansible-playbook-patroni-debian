@@ -8,9 +8,9 @@ restapi:
   listen: {{ ansible_default_ipv4.address }}:{{ api_port }}
   connect_address: {{ ansible_default_ipv4.address }}:{{ api_port }}
 {% if patroni_restapi_cert is defined %}
-  cafile: {{ patroni_restapi_ca }}
-  certfile: {{ patroni_restapi_cert }}
-  keyfile: {{ patroni_restapi_key }}
+  cafile: {{ patroni_restapi_cafile }}
+  certfile: {{ patroni_restapi_certfile }}
+  keyfile: {{ patroni_restapi_keyfile }}
   verify_client: {{ patroni_restapi_verify_client }}
 {% else %}
 #  certfile: /etc/ssl/certs/ssl-cert-snakeoil.pem
