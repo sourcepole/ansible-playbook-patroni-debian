@@ -1,4 +1,5 @@
 postgresql_port: "5432"
 postgresql_network: "{{ ansible_default_ipv4.network }}"
 postgresql_repl_network: "{{ ansible_default_ipv4.network }}"
+patroni_restapi_verify_client: none # same as patroni default
 vip_mask: "32"

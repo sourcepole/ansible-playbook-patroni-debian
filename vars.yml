@@ -31,8 +31,10 @@ patroni_postgres_pass: ""
 
 # optional: protect patroni restapi service with TLS
 #
+#patroni_restapi_ca: /etc/letsencrypt/live/server.example.org/ca.pem
 #patroni_restapi_key: /etc/letsencrypt/live/server.example.org/privkey.pem
 #patroni_restapi_cert: /etc/letsencrypt/live/server.example.org/cert.pem
+#patroni_restapi_verify_client: require
 
 # optional: use username/password for patroni restapi service
 #
