@@ -168,6 +168,8 @@ you need to:
 
       ansible-galaxy install tpo.local_certificate_authority
 
+  make sure you have at least version 1.2.1
+
 Rewinding/Recloning outdated former primaries
 ---------------------------------------------
 
