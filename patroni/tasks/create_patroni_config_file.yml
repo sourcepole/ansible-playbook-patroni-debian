@@ -14,8 +14,10 @@
   when: existing_port.stdout != "" and existing_port.stdout != postgresql_port
 
 - name: make sure port for new cluster is available
-  # fail when grep was successful!
-  shell: "pg_lsclusters -h | awk '{print $3}' | grep -q {{ postgresql_port }} || false "
+  shell: "pg_lsclusters -h | awk '{print $3}' | grep -q {{ postgresql_port }}"
+  register: result
+  # fail when grep found something
+  failed_when: "result.rc == 0"
   check_mode: no # always run
   changed_when: false # doesn't change anything
   when: existing_port.stdout == ""
