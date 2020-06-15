@@ -1,11 +1,11 @@
 - block:
   - set_fact:
       etcd_proto: https
-    when: use_certificates is defined and use_certificates
+    when: use_certificates
 
   - set_fact:
       etcd_proto: http
-    when: use_certificates is not defined or not use_certificates
+    when: not use_certificates
 
   - set_fact:
       etcd_host_ip: "{{ hostvars[ansible_hostname].ansible_default_ipv4.address }}"

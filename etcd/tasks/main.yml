@@ -2,7 +2,7 @@
 - block:
   - include: etcd_install_deb.yml
   - include: etcd_certificates.yml
-    when: use_certificates is defined and use_certificates
+    when: use_certificates
   - include: etcd_configure.yml
   - include: etcd_unmask_and_start.yml
   # this is not strictly required,

@@ -13,7 +13,7 @@ zookeeper:
    if dcs == 'etcd' %}
 etcd:
   protocol: {{ etcd_proto }}
-{%    if use_certificates is defined and use_certificates %}
+{%    if use_certificates %}
   cacert: /etc/patroni/certificates/ca.cert.pem
   key:    /etc/patroni/certificates/{{ ansible_hostname }}.key.pem
   cert:   /etc/patroni/certificates/{{ ansible_hostname }}.cert.pem
