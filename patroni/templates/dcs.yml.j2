@@ -14,9 +14,9 @@ zookeeper:
 etcd:
   protocol: {{ etcd_proto }}
 {%    if use_certificates is defined and use_certificates %}
-  cacert: /etc/etcd/ca.cert.pem
-  key:    /etc/etcd/{{ ansible_hostname }}.key.pem
-  cert:   /etc/etcd/{{ ansible_hostname }}.cert.pem
+  cacert: /etc/patroni/certificates/ca.cert.pem
+  key:    /etc/patroni/certificates/{{ ansible_hostname }}.key.pem
+  cert:   /etc/patroni/certificates/{{ ansible_hostname }}.cert.pem
 {%    endif %}
   hosts:
 {% endif

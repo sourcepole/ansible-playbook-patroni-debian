@@ -32,8 +32,8 @@ endpoints:
   # For consul, you'll obviously need to change the port to 8500. Unless you're using a different one. Maybe you're a rebel and are running consul on port 2379? Just to confuse people? Why would you do that? Oh, I get it.
 
 {% if use_certificates %}
-etcd_ca_file: "/etc/etcd/ca.cert.pem"
-etcd_cert_file: "/etc/etcd/{{ ansible_hostname }}.cert.pem"
-etcd_key_file: "/etc/etcd/{{ ansible_hostname }}.key.pem"
+etcd_ca_file: "/etc/patroni/certificates/ca.cert.pem"
+etcd_cert_file: "/etc/patroni/certificates/{{ ansible_hostname }}.cert.pem"
+etcd_key_file: "/etc/patroni/certificates/{{ ansible_hostname }}.key.pem"
 {% endif %}
 

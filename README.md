@@ -7,6 +7,7 @@ It is an enhanced fork of [credativ's playbook](https://github.com/credativ/ansi
 It has these additional features:
 
 * etcd tls authentication and transport over HTTPS support
+* postgres and patroni TLS setup
 * support multiple etcd endpoints
 * support rerunning the roles/playbooks without messing up the cluster
 * support for Hetzner Floating IPs
@@ -88,7 +89,9 @@ The following are a few useful variables that can be set:
  * `vip`
  * `vip_mask` (default: 32)
  * `vip_manager_hetzner*` (configures Hetzner Floating or Failover IPs - see [vars.yml])
- * `use_certificates` (only applies to `etcd` DCS, default: false, see below)
+ * `use_certificates` (applies to `etcd` DCS, patroni and postgres, default: false, see below)
+ * `patroni_ca_dir` (where to find certificates that need to be deployed,
+   only needed when `use_certificates: true`)
 
 Example: `ansible-playbook -i inventory -e dcs=consul patroni.yml`
 
@@ -132,23 +135,30 @@ This [fork](https://salsa.debian.org/tpo/vip-manager) of the Debian package for
 `vip-manager` supports passing the configuration in the systemd unit file via
 the `-config` parameter.
 
-Etcd with TLS authentication
-----------------------------
+TLS
+---
 
-Configuring etcd to use tls/certificate based, authenticated connections is
-supported.
+Setting `use_certificates: true` (see `patroni.yml` for details)
+will:
 
-However you need a vip-manager that supports authentication for that, like f.ex
-[https://github.com/tpo/vip-manager/]. Build instructions for a Debian package are
+* switch on using X.509 certificates for etcd authentication and TLS based
+  communications encryption with etcd
+
+* setup TLS encrypted patroni <-> postgres communication
+
+* enable TLS based connections for postgres (plain connections will still
+  be allowed)
+
+Per host, each of the services above will get the same certificates, that is
+the ca certificate, the host certificate and certificate key.
+
+If you set `use_certificates: true` then you will need a vip-manager that supports
+authentication, like f.ex
+[this fork of vip-manager](https://github.com/tpo/vip-manager/). Build instructions
+for a Debian package are
 [here](https://salsa.debian.org/tpo/vip-manager/-/blob/master/README.build.debian).
 
-In order to use etcd TLS based authentication please set:
-
-    use_certificates: true
-
-(see `patroni.yml` for details)
-
-You need to:
+You will need to:
 
 * either use externally generated certificates or
 * or you can let this playbook generate a CA and certificates
@@ -158,17 +168,19 @@ you need to:
 
 * uncomment the line:
   
-      - import_playbook: certificates-sp.yml
+      - import_playbook: certificates.yml
 
   in `patroni.yml`
 
-* configure `certificates-sp.yml`
+* configure `certificates.yml`
 
 * install the required `tpo.local_certificate_authority` role like this:
 
       ansible-galaxy install tpo.local_certificate_authority
 
-  make sure you have at least version 1.2.1
+  make sure you get at least version 1.2.1 of that role.
+
+* set `patroni_ca_dir` pointing to the directory that contains the CA.
 
 Rewinding/Recloning outdated former primaries
 ---------------------------------------------

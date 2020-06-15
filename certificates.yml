@@ -1,8 +1,6 @@
 ---
 - name: Create CA and server certificates
   hosts: localhost
-  vars:
-    ca_dir: files/example_CA
   roles:
      - role: tpo.local_certificate_authority/ca
        ca_name: "Example CA"

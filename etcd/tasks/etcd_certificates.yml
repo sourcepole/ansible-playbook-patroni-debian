@@ -1,40 +1,5 @@
-# howto: https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/security.md
-#
-- block:
-  - name: Create /etc/etcd
-    file:
-      path: /etc/etcd
-      state: directory
-  
-  - name: Copy CA certificate
-    copy:
-      src: "{{ ca_dir }}/certs/ca.cert.pem"
-      dest: /etc/etcd
-    notify: restart etcd
-  
-  # this creates the ssl-cert group required by the
-  # subsequent task
-  - name: Install ssl-cert package
-    apt: pkg=ssl-cert
-
-  - name: Copy server private key
-    copy:
-      src: "{{ ca_dir }}/private/{{ ansible_hostname }}.key.pem"
-      dest: /etc/etcd
-      # Both etcd and patroni need to be able to read the private
-      # key. Patroni runns as user postgres which is member of the
-      # ssl-cert group. Etcd runs as user etcd.
-      owner: etcd
-      group: ssl-cert
-      mode: '0660' # only owner can read
-    notify: restart etcd
-
-  - name: Copy server certificate
-    copy:
-      src: "{{ ca_dir }}/certs/{{ ansible_hostname }}.cert.pem"
-      dest: /etc/etcd
-    notify: restart etcd
-
-  # block tag:
-  tags:
-    - config
+- name: add user etcd to group ss-cert
+  user:
+    name: etcd
+    groups: ssl-cert
+    append: yes  

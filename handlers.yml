@@ -1,4 +1,9 @@
 ---
+- name: reload etcd
+  systemd:
+    name: etcd
+    state: reloaded
+
 - name: restart etcd
   systemd:
     daemon_reload: yes
@@ -20,12 +25,22 @@
     state: restarted
     enabled: yes
 
+- name: reload patroni
+  systemd:
+    name: patroni@{{ postgresql_major_version }}-{{ postgresql_cluster_name }}
+    state: reloaded
+
 - name: restart patroni
   systemd:
     daemon_reload: yes
     name: patroni@{{ postgresql_major_version }}-{{ postgresql_cluster_name }}
     state: restarted
     enabled: yes
+
+- name: reload vip-manager
+  systemd:
+    name: vip-manager@{{ postgresql_major_version }}-{{ postgresql_cluster_name }}
+    state: reloaded
 
 - name: restart vip-manager
   systemd:

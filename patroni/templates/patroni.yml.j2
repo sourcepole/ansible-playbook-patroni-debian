@@ -7,11 +7,11 @@ name: {{ ansible_hostname }}
 restapi:
   listen: {{ ansible_default_ipv4.address }}:{{ api_port }}
   connect_address: {{ ansible_default_ipv4.address }}:{{ api_port }}
-{% if patroni_restapi_certfile is defined %}
-  cafile: {{ patroni_restapi_cafile }}
-  certfile: {{ patroni_restapi_certfile }}
-  keyfile: {{ patroni_restapi_keyfile }}
-  verify_client: {{ patroni_restapi_verify_client }}
+{% if use_certificates %}
+  cafile:   /etc/patroni/certificates/ca.cert.pem
+  certfile: /etc/patroni/certificates/{{ ansible_hostname }}.cert.pem
+  keyfile:  /etc/patroni/certificates/{{ ansible_hostname }}.key.pem
+  verify_client: required
 {% endif %}
 {% if patroni_restapi_username is defined %}
   authentication:
@@ -90,8 +90,14 @@ postgresql:
   pgpass: /var/lib/postgresql/{{ version_dash_cluster_name }}.pgpass
   authentication:
     replication:
-      username: "{{ patroni_replication_user }}"
+      username: replication_user
       password: "{{ patroni_replication_pass }}"
+{% if use_certificates %}
+      sslrootcert: /etc/patroni/certificates/ca.cert.pem
+      sslcert:     /etc/patroni/certificates/{{ ansible_hostname }}.cert.pem
+      sslkey:      /etc/patroni/certificates/{{ ansible_hostname }}.postgres.key.pem
+      sslmode: verify-ca
+{% endif %}
 # A superuser role is required in order for Patroni to manage the local
 # Postgres instance.  If the option `use_unix_socket' is set to `true', then
 # specifying an empty password results in no md5 password for the superuser
@@ -100,7 +106,24 @@ postgresql:
 # is set.
     superuser:
       username: postgres
-      password: {% if patroni_postgres_pass|length %}"{{ patroni_postgres_pass }}"{% endif %}
+      password: {% if patroni_postgres_pass|length %}"{{ patroni_postgres_pass }}"
+{% endif %}
+{% if use_certificates %}
+      sslrootcert: /etc/patroni/certificates/ca.cert.pem
+      sslcert:     /etc/patroni/certificates/{{ ansible_hostname }}.cert.pem
+      sslkey:      /etc/patroni/certificates/{{ ansible_hostname }}.postgres.key.pem
+      sslmode: verify-ca
+{% endif %}
+    rewind:  # Has no effect on postgres 10 and lower
+      username: rewind_user
+      password: "{{ patroni_rewind_pass }}"
+{% if use_certificates %}
+      sslrootcert: /etc/patroni/certificates/ca.cert.pem
+      sslcert:     /etc/patroni/certificates/{{ ansible_hostname }}.cert.pem
+      sslkey:      /etc/patroni/certificates/{{ ansible_hostname }}.postgres.key.pem
+      sslmode: verify-ca
+{% endif %}
+
 
   parameters:
     unix_socket_directories: '/var/run/postgresql/'
@@ -108,3 +131,10 @@ postgresql:
     logging_collector: 'on'
     log_directory: '/var/log/postgresql'
     log_filename: 'postgresql-{{ version_dash_cluster_name }}.log'
+{% if use_certificates %}
+    ssl: 'on'
+    ssl_ca_file:   /etc/patroni/certificates/ca.cert.pem
+    ssl_cert_file: /etc/patroni/certificates/{{ ansible_hostname }}.cert.pem
+    ssl_key_file:  /etc/patroni/certificates/{{ ansible_hostname }}.postgres.key.pem
+{% endif %}
+

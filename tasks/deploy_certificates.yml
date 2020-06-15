@@ -1,0 +1,46 @@
+---
+# create ssl-cert group required below
+- name: Install ssl-cert package
+  apt: pkg=ssl-cert
+
+- name: Create /etc/patroni/certificates directory
+  file: path=/etc/patroni/certificates state=directory
+
+- name: Copy CA certificate
+  copy:
+    src: "{{ patroni_ca_dir }}/certs/{{ item }}"
+    dest: /etc/patroni/certificates
+  with_items:
+    - ca.cert.pem
+    - "{{ ansible_hostname }}.cert.pem"
+  notify:
+    - reload {{ dcs }}
+    - reload patroni
+    - reload vip-manager
+
+# patroni is weird, in that it requires the cert key
+# used for postgres to be mode 0600
+#
+- name: Copy host private key for postgres/patroni
+  copy:
+    src: "{{ patroni_ca_dir }}/private/{{ ansible_hostname }}.key.pem"
+    dest: "/etc/patroni/certificates/{{ ansible_hostname }}.postgres.key.pem"
+    owner: postgres
+    mode: '0600' # only owner can read
+  notify:
+    - reload {{ dcs }}
+    - reload patroni
+    - reload vip-manager
+  when: ansible_host in groups[pgsql_servers_group]
+
+- name: Copy host private key for etcd/etcdclient/patroni
+  copy:
+    src: "{{ patroni_ca_dir }}/private/{{ ansible_hostname }}.key.pem"
+    dest: "/etc/patroni/certificates/{{ ansible_hostname }}.key.pem"
+    owner: root
+    group: ssl-cert
+    mode: '0640' # owner and group can read
+  notify:
+    - reload {{ dcs }}
+    - reload patroni
+    - reload vip-manager

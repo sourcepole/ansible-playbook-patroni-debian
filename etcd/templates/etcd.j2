@@ -238,7 +238,7 @@ ETCD_ADVERTISE_CLIENT_URLS="{% for ip in dcs_ips %}{{ etcd_proto }}://{{ ip }}:2
 ## default: none
 # ETCD_CA_FILE
 {% if use_certificates %}
-ETCD_CA_FILE="/etc/etcd/ca.cert.pem"
+ETCD_CA_FILE="/etc/patroni/certificates/ca.cert.pem"
 {% endif %}
 
 ##### --cert-file
@@ -246,7 +246,7 @@ ETCD_CA_FILE="/etc/etcd/ca.cert.pem"
 ## default: none
 # ETCD_CERT_FILE
 {% if use_certificates %}
-ETCD_CERT_FILE="/etc/etcd/{{ ansible_hostname }}.cert.pem"
+ETCD_CERT_FILE="/etc/patroni/certificates/{{ ansible_hostname }}.cert.pem"
 {% endif %}
 
 ##### --key-file
@@ -254,7 +254,7 @@ ETCD_CERT_FILE="/etc/etcd/{{ ansible_hostname }}.cert.pem"
 ## default: none
 # ETCD_KEY_FILE
 {% if use_certificates %}
-ETCD_KEY_FILE="/etc/etcd/{{ ansible_hostname }}.key.pem"
+ETCD_KEY_FILE="/etc/patroni/certificates/{{ ansible_hostname }}.key.pem"
 {% endif %}
 
 ##### --client-cert-auth
@@ -270,7 +270,7 @@ ETCD_CLIENT_CERT_AUTH="true"
 ## default: none
 # ETCD_TRUSTED_CA_FILE
 {% if use_certificates %}
-ETCD_PEER_TRUSTED_CA_FILE="/etc/etcd/ca.cert.pem"
+ETCD_PEER_TRUSTED_CA_FILE="/etc/patroni/certificates/ca.cert.pem"
 {% endif %}
 
 ##### --auto-tls
@@ -290,7 +290,7 @@ ETCD_PEER_TRUSTED_CA_FILE="/etc/etcd/ca.cert.pem"
 ## default: none
 # ETCD_PEER_CERT_FILE
 {% if use_certificates %}
-ETCD_PEER_CERT_FILE="/etc/etcd/{{ ansible_hostname }}.cert.pem"
+ETCD_PEER_CERT_FILE="/etc/patroni/certificates/{{ ansible_hostname }}.cert.pem"
 {% endif %}
 
 ##### --peer-key-file
@@ -298,7 +298,7 @@ ETCD_PEER_CERT_FILE="/etc/etcd/{{ ansible_hostname }}.cert.pem"
 ## default: none
 # ETCD_PEER_KEY_FILE
 {% if use_certificates %}
-ETCD_PEER_KEY_FILE="/etc/etcd/{{ ansible_hostname }}.key.pem"
+ETCD_PEER_KEY_FILE="/etc/patroni/certificates/{{ ansible_hostname }}.key.pem"
 {% endif %}
 
 ##### --peer-client-cert-auth

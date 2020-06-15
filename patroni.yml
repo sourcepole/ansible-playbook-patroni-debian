@@ -32,20 +32,27 @@
 # and include that playbook here, if you want to have
 # the certificates set up by that playbook.
 #
-# Please use a different mechanism for creating a CA
-# and certificates if this one doesn't fit you.
+# Please use a different mechanism for creating a CA,
+# certificates and deploying them if this one doesn't
+# fit you.
 #
 #- import_playbook: certificates.yml
+
+- name: Deploy certificates
+  hosts: "{{ dcs_servers_group }}", "{{ pgsql_servers_group }}"
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  handlers:
+    - include: handlers.yml
+  tasks:
+    - include: tasks/deploy_certificates.yml
+      when: use_certificates
 
 - name: Setup DCS servers
   hosts: "{{ dcs_servers_group }}"
   vars_files:
     - vars.yml
-  vars:
-    # if you want to use certificate based authentication
-    # for etcd, then you need to set:
-    # use_certificates: true
-    # requires `ca_dir` to be set
   handlers:
     - include: handlers.yml
   become: true
