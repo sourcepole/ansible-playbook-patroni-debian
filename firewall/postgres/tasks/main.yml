@@ -1,0 +1,9 @@
+- name: Allow direct postgres access from DB machines for replication
+  ufw:
+    rule: allow
+    from_ip: "{{ hostvars[item].ansible_default_ipv4.address }}"
+    proto: tcp
+    to_port: "5432"
+    comment: allow direct postgres access from DB machines for replication
+  with_items: "{{ groups[pgsql_servers_group] }}"
+

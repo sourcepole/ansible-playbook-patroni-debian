@@ -1,0 +1,9 @@
+- name: Allow access from DB machines to patroni RESTAPI
+  ufw:
+    rule: allow
+    from_ip: "{{ hostvars[item].ansible_default_ipv4.address }}"
+    proto: tcp
+    to_port: "8008"
+    comment: DB servers to patroni REST API
+  with_items: "{{ groups[pgsql_servers_group] }}"
+

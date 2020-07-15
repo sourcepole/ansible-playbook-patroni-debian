@@ -49,6 +49,12 @@
     - include: tasks/deploy_certificates.yml
       when: use_certificates
 
+# If you enable any of the "firewall" roles below, then
+#
+# * make sure you'll leave your access port (ssh or such) open
+# * set default policy to deny
+# * make sure you don't lock yourself out!
+
 - name: Setup DCS servers
   hosts: "{{ dcs_servers_group }}"
   vars_files:
@@ -60,6 +66,8 @@
   become_method: sudo
   roles:
     - {{ dcs }}
+    # enable access to dcs ports. Only implemented for etcd
+    # - "firewall/{{ dcs }}"
 
 
 - name: Setup Postgres Servers
@@ -83,10 +91,18 @@
       tags:
         - config
 
-  role:
+  roles:
     - role: consul
       when: dcs == "consul"
     - postgres
+    #- firewall/postgres
     - patroni
+    #- firewall/patroni
+
     # if you want to use Hetzner Floating or Failover IPs
     #- vip-manager-hetzner
+
+    - name
+# Enable correct access to patroni/postgres/etcd ports via
+# ufw. You'll need to 
+#
