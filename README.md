@@ -86,6 +86,7 @@ The following are a few useful variables that can be set:
  * `patroni_replication_user` (default: `replicator`)
  * `patroni_replication_pass`
  * `patroni_postgres_pass`
+ * `patroni_config_template` (default: `patroni.yml.j2`, will by default find the one inside `patroni/templates`)
  * `vip`
  * `vip_mask` (default: 32)
  * `vip_manager_hetzner*` (configures Hetzner Floating or Failover IPs - see [vars.yml])
