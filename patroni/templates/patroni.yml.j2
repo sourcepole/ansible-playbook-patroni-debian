@@ -73,6 +73,8 @@ bootstrap:
       - host    replication     all             127.0.0.1/32            md5
       - host    replication     all             ::1/128                 md5
       - host    replication     all             {{ postgresql_repl_network }}        md5
+  initdb:
+  - encoding: UTF8
 
 postgresql:
   # Custom clone method
