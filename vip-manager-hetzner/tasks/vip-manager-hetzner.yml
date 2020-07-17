@@ -27,13 +27,40 @@
   when: vip_manager_hetzner_type == "hetzner_floating_ip"
   notify: restart vip-manager
   
+- name: check whether systemd-networkd is running
+  shell: systemctl is-active --quiet systemd-networkd
+  check_mode: no # always execute
+  changed_when: false # doesn't change anything
+  failed_when: false # doesn't fail
+  register: systemd_networkd
+
+# network config via /etc/network/interfaces.d/
+#
 - name: Add VIP interface config à la Hetzner
   template:
     src: vip-if.cfg
     dest: /etc/network/interfaces.d/vip.cfg
   register: vip_interface
+  when: systemd_networkd.rc != 0
 
 - name: Reload VIP interface
   command: "ifup --force {{ ansible_default_ipv4.interface }}:1"
+  when: vip_interface.changed
+
+# network config via systemd-networkd
+#
+# TODO: find out about the '10' below
+- name: Add VIP interface config à la Hetzner
+  blockinfile:
+    path: "/etc/systemd/network/10-{{ ansible_default_ipv4.interface }}.network"
+    block: |
+      #Failover IP
+      [Address]
+      Address={{ vip }}/32
+  register: vip_interface
+  when: systemd_networkd.rc == 0
+
+- name: Reload VIP interface
+  command: "networkctl reload"
   when: vip_interface.changed
 
