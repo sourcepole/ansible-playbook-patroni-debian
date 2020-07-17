@@ -1,4 +1,4 @@
-- name: add user etcd to group ss-cert
+- name: add user etcd to group ssl-cert
   user:
     name: etcd
     groups: ssl-cert
