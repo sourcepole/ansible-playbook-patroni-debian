@@ -1,0 +1,16 @@
+# v3
+#
+# export ETCDCTL_API=3
+# export ETCDCTL_CACERT=/etc/patroni/certificates/ca.cert.pem
+# export ETCDCTL_CERT=/etc/patroni/certificates/{{ ansible_hostname }}.cert.pem
+# export ETCDCTL_KEY=/etc/patroni/certificates/{{ ansible_hostname }}.key.pem
+# export ETCDCTL_ENDPOINTS="{{ etcd_proto }}://{{ etcd_host_ip }}:2379,http://{{ etcd_host_ip }}:4001"
+
+# it seems like our current setup is only v2 compatible, so
+# use v2 client settings for the time being
+#
+export ETCDCTL_API=2
+export ETCDCTL_CA_FILE=/etc/patroni/certificates/ca.cert.pem
+export ETCDCTL_CERT_FILE=/etc/patroni/certificates/{{ ansible_hostname }}.cert.pem
+export ETCDCTL_KEY_FILE=/etc/patroni/certificates/{{ ansible_hostname }}.key.pem
+export ETCDCTL_ENDPOINT="{{ etcd_proto }}://{{ etcd_host_ip }}:2379,http://{{ etcd_host_ip }}:4001"
