@@ -6,7 +6,7 @@
   register: etc_bash_completion_d
 
 - name: Add bash completions for etcd
-  copy: src=etcdctl dest=/etc/bash_completion.d
+  copy: src=bash_completion/etcdctl dest=/etc/bash_completion.d
   when: etc_bash_completion_d.stat.exists
 
 # it seems like our current setup is only v2 compatible, so
