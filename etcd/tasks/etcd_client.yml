@@ -11,12 +11,12 @@
 
 - block:
 
-  - name: Add etcdctl settings
+  - name: Add /root/.etcdctl_environment
     template:
       src: etcdctl_environment.j2
       dest: /root/.etcdctl_environment
 
-  - name: Configure etcdctl settings
+  - name: Source /root/.etcdctl_environment from ~/.bashrc
     lineinfile:
       dest: "/root/.bashrc"
       line: "source /root/.etcdctl_environment"
