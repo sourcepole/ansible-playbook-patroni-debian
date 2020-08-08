@@ -1,4 +1,6 @@
-# ATTENTION DANGER: this playbook will destroy everything, Akira style!
+# ATTENTION DANGER: this playbook will destroy everything,
+#                   even potential database data - everything!
+#                   Akira style!
 #
 - name: will purge patroni, etcd, postgres, vip-manager
   hosts:
@@ -25,4 +27,5 @@
           - /etc/patroni
           - /etc/postgresql
           - /etc/postgresql-common
+          - /var/lib/postgresql/{{ postgresql_major_version }}
         state: absent
