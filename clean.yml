@@ -25,7 +25,6 @@
     - file:
         path:
           - /etc/patroni
-          - /etc/postgresql
-          - /etc/postgresql-common
-          - /var/lib/postgresql/{{ postgresql_major_version }}
+          - "/etc/postgresql/{{ postgresql_major_version }}"
+          - "/var/lib/postgresql/{{ postgresql_major_version }}"
         state: absent
