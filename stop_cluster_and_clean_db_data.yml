@@ -4,8 +4,6 @@
 #
 - name: stop patroni and remove databases ready to re-init
   hosts: {{ pgsql_servers_group }}
-  vars_files:
-    - vars.yml
   tasks:
     - debug: msg="removing patroni and postgres V.{{ postgresql_major_version }} data"
       run_once: true

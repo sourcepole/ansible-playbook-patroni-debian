@@ -8,8 +8,6 @@
   hosts:
     - {{ dcs_servers_group }}
     - {{ pgsql_servers_group }}
-  vars_files:
-    - vars.yml
   tasks:
     - apt:
         pkg:

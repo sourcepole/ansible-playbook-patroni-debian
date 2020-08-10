@@ -51,7 +51,7 @@ Assuming password-less SSH access to the four nodes is configured, the playbook
 can be run as follows:
 
 ```
-ansible-playbook -i inventory patroni.yml
+ansible-playbook -i inventory -e vars.yml patroni.yml
 ```
 
 Supported Versions
@@ -94,7 +94,7 @@ The following are a few useful variables that can be set:
  * `patroni_ca_dir` (where to find certificates that need to be deployed,
    only needed when `use_certificates: true`)
 
-Example: `ansible-playbook -i inventory -e dcs=consul patroni.yml`
+Example: `ansible-playbook -i inventory -i @vars.yml patroni.yml`
 
 For further configuration and understanding it might be useful to consult
 the [patroni configuration settings documentation](https://github.com/zalando/patroni/blob/master/docs/SETTINGS.rst).
@@ -111,7 +111,7 @@ configuration generation will increment this for every additional cluster, so
 running
 
 ```
-ansible-playbook -i inventory -e postgresql_cluster_name=test2 --tags=config pgsql-server.yml
+ansible-playbook -i inventory -e postgresql_cluster_name=test2 -e @vars.yml --tags=config pgsql-server.yml
 ```
 
 will result in a second cluster, `11/test2` using PostgreSQL port 5433 and
