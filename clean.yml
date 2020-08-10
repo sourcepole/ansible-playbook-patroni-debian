@@ -4,8 +4,8 @@
 #
 - name: will purge patroni, etcd, postgres, vip-manager
   hosts:
-    - dcs_servers
-    - pgsql_servers
+    - {{ dcs_servers_group }}
+    - {{ pgsql_servers_group }}
   vars_files:
     - vars.yml
   tasks:
