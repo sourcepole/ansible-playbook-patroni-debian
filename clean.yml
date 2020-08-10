@@ -2,6 +2,8 @@
 #                   even potential database data - everything!
 #                   Akira style!
 #
+- include_playbook: stop_cluster_and_clean_db_data.yml
+
 - name: will purge patroni, etcd, postgres, vip-manager
   hosts:
     - {{ dcs_servers_group }}
@@ -20,11 +22,3 @@
           - "postgresql-client-{{ postgresql_major_version }}"
         state: absent
         purge: yes
-    - command: pkill -TERM patroni
-      ignore_errors: true
-    - file:
-        path:
-          - /etc/patroni
-          - "/etc/postgresql/{{ postgresql_major_version }}"
-          - "/var/lib/postgresql/{{ postgresql_major_version }}"
-        state: absent

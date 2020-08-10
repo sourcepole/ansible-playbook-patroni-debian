@@ -1,0 +1,30 @@
+# ATTENTION DANGER: this playbook will remove patroni state
+#                   and even potential database data - everything!
+#                   BOOOM!!!!
+#
+- name: stop patroni and remove databases ready to re-init
+  hosts: {{ pgsql_servers_group }}
+  vars_files:
+    - vars.yml
+  tasks:
+    - debug: msg="removing patroni and postgres V.{{ postgresql_major_version }} data"
+      run_once: true
+
+    - name: stop patroni
+      service: name=patroni@{{ postgresql_major_version }}-qgisclouddb.service state=stopped
+
+    # be sure
+    - name: kill patroni
+      command: pkill -TERM patroni
+      ignore_errors: true
+
+    - name: remove postgres config and DB state
+      file: path={{ item }} state=absent
+      with_items:
+        - "/etc/postgresql/{{ postgresql_major_version }}"
+        - "/var/lib/postgresql/{{ postgresql_major_version }}"
+
+    - name: remove patroni state
+      shell: ". ~/.etcdctl_environment && etcdctl rm -r /postgresql-common"
+      run_once: true # only one member of the cluster needs to execute this
+
