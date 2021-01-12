@@ -62,3 +62,5 @@
 
   # block tag:
   tags: config
+
+- include: install-molly-guard.yml

@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# 40-ensure-patroni-stopped - make sure patroni is is stopped. Patroni
+#                             *must* be stopped before rebooting!
+#
+# Copyright © 2021 Tomáš Pospíšek <tpo_deb@sourcepole.ch>
+#                  based on the script 30-query-hostname
+#
+# Released under the terms of the Artistic Licence 2.0
+#
+set -eu
+
+[ -f "$MOLLYGUARD_SETTINGS" ] && . "$MOLLYGUARD_SETTINGS"
+
+trap 'echo;sigh' 1 2 3 9 10 12 15
+
+if ! command -v pgrep > /dev/null; then
+  echo "Please make sure pgrep is installed; I won't $MOLLYGUARD_CMD ..." >&2
+  exit 1
+fi
+
+if pgrep patroni > /dev/null; then
+  echo "Please stop patroni before rebooting; I won't $MOLLYGUARD_CMD ..." >&2
+  exit 1
+fi
+
+trap - 1 2 3 9 10 12 15
+
+exit 0
