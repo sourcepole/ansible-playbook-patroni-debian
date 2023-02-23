@@ -1,16 +1,11 @@
 ---
 
-- name: Get pgdg key
-  apt_key:
-    data: "{{ lookup('file', 'pgapt-key.ACCC4CF8.asc') }}"
-    id: ACCC4CF8
-    state: present
-
-- name: Setup pgdg repository
-  apt_repository:
-    repo: 'deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename }}-pgdg main'
-    filename: 'pgdg'
-    update_cache: true
+- name: add apt.postgresql.org repo
+  include_role:
+    name: sourcepole.public.postgresql
+    tasks_from: repo.yml
+  vars:
+    pg_from_postgresql_org: true
 
 - name: Install postgresql-common
   package:
