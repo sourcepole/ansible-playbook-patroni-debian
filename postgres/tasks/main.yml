@@ -1,12 +1,5 @@
 ---
 
-- name: add apt.postgresql.org repo
-  include_role:
-    name: sourcepole.public.postgresql
-    tasks_from: repo.yml
-  vars:
-    pg_from_postgresql_org: true
-
 - name: Install postgresql-common
   package:
     name: postgresql-common
