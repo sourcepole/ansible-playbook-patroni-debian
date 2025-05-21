@@ -1,4 +1,18 @@
 ---
+- name: create postgres group if necessary
+  group:
+    name: postgres
+    system: yes
+
+- name: create postgres user if necessary
+  user:
+    name: postgres
+    group: postgres
+    system: yes
+    home: /var/lib/postgresql
+    comment: PostgreSQL administrator
+    shell: /bin/bash
+
 # create ssl-cert group required below
 - name: Install ssl-cert package
   apt: pkg=ssl-cert
