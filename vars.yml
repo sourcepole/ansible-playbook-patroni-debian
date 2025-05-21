@@ -1,36 +1,71 @@
 ---
+############### certificates/authentication/encryption #############
+
 use_certificates: false
-# only required if `use_certificates: true`
+
+# the following needs to be set if
+# `use_certificates: true`
+#
 #patroni_ca_dir: files/example_CA
 
+
+############### DCS - Distributed Consensus Store ##################
+
+# dcs: "etcd" | "consul" | "zookeeper"
+#
 dcs: "etcd"
-# inventory group that contains the inventory_names of the
-# dcs_servers
+
+# inventory group that contains the inventory_names
+# of the dcs_servers
+#
 dcs_servers_group: dcs_servers
-# same as previous for pgsql servers
-pgsql_servers_group: pgsql_servers
+
 dcs_port:
   consul:    8500
   zookeeper: 2181
   etcd:      2379
+
 consul_datacenter: "global"
 consul_group: "consul"
+
+
+############### Postgres ###########################################
+
+# inventory group that contains the inventory_names
+# of the pgsql servers
+#
+pgsql_servers_group: pgsql_servers
+
 postgresql_cluster_name: "test"
-postgresql_major_version: "11"
+postgresql_major_version: "13"
 postgresql_data_dir_base: "/var/lib/postgresql"
 
-# network that can do queries
-# by default network of default IP address is used
-#postgresql_network: "10.0.0.016"
+# Network that is allowed to access postgres and
+# execute SQL queries. The connecting client is
+# required to authenticate via the md5 method. By
+# default this is the network address of the
+# default network interface.
+#
+#postgresql_network: "10.0.0.0/16"
 
-# network that can do replication
-# by default network of default IP address is used
+# Network that is allowed to do postgresql
+# replication. The connecting client is
+# required to authenticate via the md5 method.
+# By default this is the network address of the
+# default network interface.
+#
 #postgresql_replication_network: "10.0.0.0/16"
 
+
+############### Patroni ############################################
+
 patroni_postgres_pass:     "SET ONE HERE!"
+patroni_replication_user: "replicator"
 patroni_replication_pass:  "SET ONE HERE!"
+
 # patroni_rewind_pass needs to be set if pg_rewind is to be used to get
 # diverged former primaries back online without a full re-clone
+#
 patroni_rewind_pass:       "SET ONE HERE!"
 
 # optional: use username/password for patroni restapi service
@@ -38,14 +73,23 @@ patroni_rewind_pass:       "SET ONE HERE!"
 #patroni_restapi_username: restapi_user
 #patroni_restapi_password: restapi_password
 
+# patroni/templates/patroni.yml.j2
+#
+patroni_config_template: "patroni.yml.j2"
+
+
+############### VIP-Manager ########################################
+
 # vip-manager will manage the vip on each node if set
 #
 #vip: "10.0.1.1"
 
 #vip_manager_hetzner_type: hetzner
+#
 # you need to create these in robot.your-server.de
 # User Icon -> Settings -> Webservice- and App-Settings
 # -> Webservice-/App-Access
+#
 #vip_manager_hetzner_user: hetzner_webapi_user
 #vip_manager_hetzner_pass: hetzner_webapi_password
 
@@ -55,8 +99,16 @@ patroni_rewind_pass:       "SET ONE HERE!"
 # such as this http://github.com/tpo/vip-manager/
 #
 # API token
+#
 #vip_manager_hetzner_tokn: "DXuia61JJaLJ2Je2jZjrnQ4zm7VcLTYvoo9dV5hpNGwgvM8mI9790niVt1IbN0sE"
+#
 # server ID
+#
 #vip_manager_hetzner_serv: "4319862"
+#
 # IP ID
+#
 #vip_manager_hetzner_ipid: "206698"
+
+
+############### END ################################################
