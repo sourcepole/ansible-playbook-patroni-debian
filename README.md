@@ -1,35 +1,35 @@
 Ansible Roles for Patroni on Debian
 ===================================
 
-This Ansible playbook allows to deploy a Patroni cluster.
+These Ansible playbooks allow you to deploy a Patroni cluster.
 
-It is an enhanced fork of [credativ's playbook](https://github.com/credativ/ansible-playbook-patroni-debian).
-It has these additional features:
+They are an enhanced fork of
+[credativ's playbook](https://github.com/credativ/ansible-playbook-patroni-debian).
 
-* etcd tls authentication and transport over HTTPS support
-* postgres and patroni TLS setup
-* support multiple etcd endpoints
-* support rerunning the roles/playbooks without messing up the cluster
-* support for Hetzner Floating IPs
-* additional documentation
-* allow to define network that has can access postgres' replication
-* structured in roles, so that you can use it from any playbook
+They have these additional features:
 
-There's a [howto article](https://www.credativ.com/blog/integrating-patroni-debian)
-on how to use this playbook.
+* they allow to configure
+  * etcd tls authentication and transport over HTTPS support
+  * postgres and patroni over TLS
+* they support multiple etcd endpoints
+* they support rerunning the roles/playbooks without messing up the cluster
+* they support for Hetzner Floating IPs
+* they have additional documentation
+* they allow to restrict the IPs that have access to postgres' replication
+* they are structured in roles, so that you can use them from any playbook
+
+Use the [howto article](https://www.credativ.com/blog/integrating-patroni-debian)
+to guide you on how to use this playbook.
 
 This playbook is using the `patroni` packages provided by Debian and/or
 PostgreSQL's `apt.postgresql.org` repository.
 
 Those packages have been integrated with Debian's `postgresql-common`
 framework and will look very similar to a regular stand-alone PostgreSQL
-install on Debian. This is done by using `pg_createconfig_patroni` creating
-setting the `manual` flag in the `/etc/postgresql/$PG_VERSION/$CLUSTER_NAME/start.conf`
-config file. That will cause the postgres init script/systemd unit not to
-start that cluster automatically. Instead `patroni` will take care to start
-and manage that cluster.
-
-For production use it should be hardened to use Ansible Vault for secrets.
+install on Debian. They set the `manual` flag in the
+ `/etc/postgresql/$PG_VERSION/$CLUSTER_NAME/start.conf` config file, which
+will cause the postgres init script/systemd unit *not* to start that cluster
+automatically. Instead `patroni` will take care to start and manage the cluster.
 
 The default topology consists of one node (`master`) acting as the DCS
 (Distributed Consensus Store) server, and three PostgreSQL/Patroni nodes
@@ -38,47 +38,42 @@ The default topology consists of one node (`master`) acting as the DCS
 DCS Server
 ----------
 
-Patroni requires a DCS for leader election and as configuration store.
-Supported DCS server are Etcd, Consul and Zookeeper. If e.g. an Etcd cluster is
-already available, then it can be configured either by editing
-`templates/dcs.yml` or (if that suffices) by setting the `dcs_server` Ansible
+Patroni (before version 2) requires a DCS for leader election and as
+configuration store. These playbooks support the following DCS servers:
+
+* etcd
+* Consul
+* Zookeeper
+
+If a DCS is already available, then it can be configured either by editing
+`templates/dcs.yml` or (if that suffices) by setting the `dcs_server` ansible
 variable to its IP address.
 
 Usage
 -----
 
-Assuming password-less SSH access to the four nodes is configured, the playbook
-can be run as follows:
+Assuming password-less SSH access to the four nodes is configured, the
+main playbook can be run as follows:
 
-```
-ansible-playbook -i inventory -e vars.yml patroni.yml
-```
+    ansible-playbook -i inventory -e vars.yml patroni.yml
 
 Supported Versions
 ------------------
 
-The playbooks have been tested on Debian 9 (stretch), testing (buster) and
-unstable (sid), as well as Ubuntu LTS 18.04 (bionic). As the
-`apt.postgresql.org` PostgreSQL (and Patroni) packages are used, all supported
-PostgreSQL versions can be installed in principle.
+The playbooks are confirmed to work on Ubuntu 20.04/focal and
+Debian 10 (buster) systems. Due to using the `apt.postgresql.org`
+repo, it should be possible to use these playbooks with all
+supported PostgreSQL versions.
 
 Note that Consul is unsupported as DCS on Debian 9 (stretch).
  
 Variables
 ---------
 
-There is a lot that can be configured. Have a look at [vars.yml](vars.yml).
+See [vars.yml](vars.yml).
 
 The following are a few useful variables that can be set: 
 
- * `dcs` (`etcd` (default), `consul` or `zookeeper`)
- * `dcs_servers_group` (default: `dcs_servers`, name of the inventory group that contains
-   the inventory\_names of the dcs\_servers)
- * `pgsql_servers_group` (default: `pgsql_servers`, name of the inventory group that contains
-   the inventory\_names of the pgsql\_servers)
- * `postgresql_cluster_name` (default: test)
- * `postgresql_major_version` (default: 11)
- * `postgresql_data_dir_base` (default: `/var/lib/postgresql`)
  * `postgresql_network` (default: network of default interface)
    network that access postgres and do queries. md5 auth is required.
  * `postgresql_repl_network` (default: network of default interface)
