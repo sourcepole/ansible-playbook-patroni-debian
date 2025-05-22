@@ -2,7 +2,7 @@
   apt:
     pkg:
       - molly-guard
-      - pgrep
+      - procps # contains pgrep
 
 - name: make sure sysadmin does not reboot machine with patroni running
   copy: src=40-ensure-patroni-stopped dest=/etc/molly-guard/run.d/
