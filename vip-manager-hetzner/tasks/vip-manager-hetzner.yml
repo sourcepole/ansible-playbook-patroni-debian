@@ -48,11 +48,10 @@
   when: vip_interface.changed
 
 # network config via systemd-networkd
-#
-# TODO: find out about the '10' below
 - name: Add VIP interface config à la Hetzner
   blockinfile:
-    path: "/etc/systemd/network/10-{{ ansible_default_ipv4.interface }}.network"
+    path: "{{ systemd_networkd_config_file }}"
+    marker: "# {mark} VIP ANSIBLE MANAGED BLOCK"
     block: |
       #Failover IP
       [Address]

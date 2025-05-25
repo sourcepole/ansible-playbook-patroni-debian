@@ -109,6 +109,10 @@ patroni_config_template: "patroni.yml.j2"
 # IP ID
 #
 #vip_manager_hetzner_ipid: "206698"
-
+#
+# to which systemd-networkd config file should the VIP be
+# added to. *MANDATORY* setting.
+#
+#systemd_networkd_config_file: /etc/systemd/network/eno1.network
 
 ############### END ################################################
