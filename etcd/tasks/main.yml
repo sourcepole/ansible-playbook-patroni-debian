@@ -1,13 +1,13 @@
 ---
 - block:
-  - include: etcd_install_deb.yml
-  - include: etcd_certificates.yml
+  - import_tasks: etcd_install_deb.yml
+  - import_tasks: etcd_certificates.yml
     when: use_certificates
-  - include: etcd_configure.yml
-  - include: etcd_unmask_and_start.yml
+  - import_tasks: etcd_configure.yml
+  - import_tasks: etcd_unmask_and_start.yml
   # this is not strictly required,
   # but convenient for debugging etc:
-  - include: etcd_client.yml
+  - import_tasks: etcd_client.yml
   tags:
     - etcd
     - config

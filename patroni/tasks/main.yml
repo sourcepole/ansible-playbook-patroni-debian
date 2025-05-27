@@ -43,9 +43,9 @@
       patroni_config_file: "/etc/patroni/{{ version_dash_cluster_name }}.yml"
       vip_config_file:     "/etc/patroni/{{ version_dash_cluster_name }}.vip"
 
-  - include: create_patroni_config_file.yml
+  - import_tasks: create_patroni_config_file.yml
 
-  - include: create_vip-manager_config.yml
+  - import_tasks: create_vip-manager_config.yml
 
   - name: make sure patroni is running
     systemd:
@@ -63,4 +63,4 @@
   # block tag:
   tags: config
 
-- include: install-molly-guard.yml
+- import_tasks: install-molly-guard.yml

@@ -2,7 +2,7 @@
 - name: Setup facts
   hosts: "{{ dcs_servers_group }}", "{{ pgsql_servers_group }}"
   handlers:
-    - include: handlers.yml
+    - import_tasks: handlers.yml
 
   pre_tasks:
     # even if --limit is used with ansible we need to collect the IPs of all
@@ -17,7 +17,7 @@
       tags: always
 
   tasks:
-    - include: tasks/set_dcs_ips.yml
+    - import_tasks: tasks/set_dcs_ips.yml
       tags: always
 
 # If you want to configure etcd with certificate based
@@ -42,9 +42,9 @@
   vars_files:
     - vars.yml
   handlers:
-    - include: handlers.yml
+    - import_tasks: handlers.yml
   tasks:
-    - include: tasks/deploy_certificates.yml
+    - import_tasks: tasks/deploy_certificates.yml
       when: use_certificates
 
 # If you enable any of the "firewall" roles below, then
@@ -58,7 +58,7 @@
   vars_files:
     - vars.yml
   handlers:
-    - include: handlers.yml
+    - import_tasks: handlers.yml
   become: true
   become_user: root
   become_method: sudo
@@ -71,7 +71,7 @@
 - name: Setup Postgres Servers
   hosts: "{{ pgsql_servers_group }}"
   handlers:
-    - include: handlers.yml
+    - import_tasks: handlers.yml
   become: true
   become_user: root
   become_method: sudo
