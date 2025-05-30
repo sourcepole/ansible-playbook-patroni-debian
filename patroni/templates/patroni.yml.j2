@@ -19,10 +19,11 @@ restapi:
     password: {{ patroni_restapi_password }}
 {% endif %}
 
-# ctl:
-#   insecure: false # Allow connections to SSL sites without certs
-#   certfile: /etc/ssl/certs/ssl-cert-snakeoil.pem
-#   cacert: /etc/ssl/certs/ssl-cacert-snakeoil.pem
+ctl:
+  insecure: false # Allow connections to SSL sites without certs
+  certfile: /etc/patroni/certificates/{{ ansible_hostname }}.cert.pem
+  cacert:   /etc/patroni/certificates/ca.cert.pem
+  keyfile:  /etc/patroni/certificates/{{ ansible_hostname }}.key.pem
 
 bootstrap:
   # Custom bootstrap method
