@@ -1,0 +1,7 @@
+- name: tell systemd to start etcd only after network is online
+  #     otherwise, when the ip address is not yet configured on
+  #     the respective interface etcd will fail with
+  #
+  #         listen tcp 192.168.9.9:2380: bind: cannot assign requested address
+  copy: src=network-only.conf dest=/etc/systemd/system/etcd2.service.d/
+  notify: reload systemd

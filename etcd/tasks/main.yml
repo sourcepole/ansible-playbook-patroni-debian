@@ -5,6 +5,7 @@
     when: use_certificates
   - import_tasks: etcd_configure.yml
   - import_tasks: etcd_unmask_and_start.yml
+  - import_tasks: start-after-network-ready.yml
   # this is not strictly required,
   # but convenient for debugging etc:
   - import_tasks: etcd_client.yml
