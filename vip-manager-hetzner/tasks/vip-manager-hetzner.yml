@@ -1,3 +1,9 @@
+- sourcepole.public.warn:
+    msg:
+      - 'You need to register the IPs that are triggering the VIP failover'
+      - 'at Hetzner under https://robot.hetzner.com/preferences/index'
+      - '-> Webservice- und App-Einstellungen -> Webservice-/App-Zugriff'
+  
 - name: Configure Hetzner FailoverIP credentials
   copy:
     content: |
